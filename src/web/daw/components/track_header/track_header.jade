@@ -1,0 +1,10 @@
+div(ng-switch='selected')
+  div(ng-switch-when='true')
+    table
+      tr
+        td
+          input.form-control(type='input', ng-model='track.name', placeholder='Edit track name')
+        td
+          button.btn.btn-warning.btn-sm(ng-click='removeTrack(index)', type='button') [X]
+  div.p5(ng-switch-when='false') 
+    strong {{ track.name }}

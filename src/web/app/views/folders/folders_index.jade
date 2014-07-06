@@ -1,0 +1,5 @@
+div(k-folders='')
+  h1 Folders
+  ul
+    li(ng-repeat='folder in folders')
+      a(href='#/folder/{{ folder }}') {{ folder }}

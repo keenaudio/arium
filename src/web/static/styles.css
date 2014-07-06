@@ -1,0 +1,139 @@
+html,body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#wrap {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+#overlay {
+  position: absolute;
+  z-index: 2;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: none;
+  overflow: hidden;
+}
+
+#overlay.visible {
+  display: block;
+}
+
+
+#header {
+  height: 50px;
+  position: relative;
+}
+
+#content {
+  position: absolute;
+  top: 50px;
+  bottom: 30px;
+  width: 100%;
+/*  overflow-y: auto;
+*/}
+
+#footer {
+  height: 30px;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  background: orange;
+}
+
+
+#left {
+  position: relative;
+  width: 300px;
+  height: 100%;
+  background: red;
+}
+
+#center {
+ position: absolute;
+left: 300px;
+  right: 0px;
+  height: 100%;
+  top: 0px;
+  background: green;
+}
+
+.smaller {
+  font-size: smaller;
+}
+
+.larger {
+  font-size: larger;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.indent {
+  padding-left: 10px;
+}
+
+.vmiddle {
+  vertical-align: middle;
+}
+
+.w100p {
+  width: 100%;
+}
+
+.p5 {
+  padding: 5px;
+}
+
+.p10 {
+  padding: 10px;
+}
+
+.p20 {
+  padding: 20px;
+}
+
+.h100p {
+  height: 100%;
+}
+
+.w100p {
+  width: 100%;
+}
+
+.mr200 {
+  margin-right: 200px;
+}
+
+.w200 {
+  width: 200px;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.center {
+  text-align: center;
+}
+
+.block {
+  display: block;
+}

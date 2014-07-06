@@ -1,0 +1,10 @@
+div.panner
+  a.btn.btn-xs.btn-default.col1(ng-click="pan(0)", ng-class="{ active: value==0 }") L
+  div.panner-fader.fader.horizontal.col2(
+    ui-slider="{ orientation: 'horizontal', range: 'min'}"
+    min="0"
+    max="100"
+    step="10"
+    ng-model="value")
+      
+  a.btn.btn-xs.btn-default.col3(ng-click="pan(100)", ng-class="{ active: value==100 }") R

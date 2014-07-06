@@ -1,0 +1,9 @@
+div.play-clip(ng-if='clip')
+  .clip-border
+    table
+      tr
+        td.p5
+          a.btn.btn-primary(daw-play-button='', playable='clip', loadable='clip')
+        td.smaller.p5
+          a.smaller(ng-href="{{ clip.sample.url }}") {{ clip.sample.fileName }}
+          div.smaller {{ clip.sample.fileRelPath }}

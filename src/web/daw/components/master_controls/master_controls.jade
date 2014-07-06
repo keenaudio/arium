@@ -1,0 +1,13 @@
+.master-controls
+  div.btn-group.btn-group-sm
+    label.btn.btn-solo(
+      ng-click='mixer.clearSolo()'
+      ng-class='{ active: mixer.soloActive }'
+      ng-disabled='!mixer.soloActive'
+    ) Clear Solo
+  .relative
+    div.center(daw-fader='', node='mixer.nodes.masterVolume')
+    .vu-meter(daw-vu-meter='', node='mixer.nodes.masterVolume', enabled='1')
+
+  strong Master
+

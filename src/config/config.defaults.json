@@ -1,0 +1,56 @@
+{
+  "ports": {
+    "livereload": 35729,
+    "server": 8008
+  },
+  "paths": {
+    "library": "./library",
+    "inbox": "./inbox",
+    "outbox": "./outbox",
+    "folders": "<%= config.get('paths.library') %>/folders",
+    "meta": "<%= config.get('paths.library') %>/meta",
+    "moggs": "<%= config.get('paths.library') %>/mogg",
+    "mwavs": "<%= config.get('paths.library') %>/wav",
+    "posted": "<%= config.get('paths.library') %>/posted",
+    "secretsJSON": "secrets.json",
+    "als": "<%= config.get('paths.library') %>/als",
+    "templates": "./templates"
+  },
+  "create_dirs": [
+    "<%= config.get('paths.library') %>",
+    "<%= config.get('paths.inbox') %>",
+    "<%= config.get('paths.folders') %>",
+    "<%= config.get('paths.meta') %>",
+    "<%= config.get('paths.moggs') %>",
+    "<%= config.get('paths.mwavs') %>",
+    "<%= config.get('paths.als') %>",
+    "<%= config.get('paths.posted') %>"
+  ],
+  "ingest": {
+    "input": "<%= config.get('paths.inbox') %>/**/*.{mogg,als}",
+    "output": {
+      "mogg": "<%= config.get('paths.moggs') %>/<%= filename %>",
+      "als": "<%= config.get('paths.als') %>/<%= folder %>/<%= folder %>.als"
+    }
+  },
+  "oggdec": {
+    "input": "<%= config.get('paths.moggs') %>/**/*.mogg",
+    "output": "<%= config.get('paths.mwavs') %>/<%= folder %>.wav"
+  },
+  "meta": {
+    "input": "<%= config.get('paths.mwavs') %>/**/*.wav",
+    "output": "<%= config.get('paths.meta') %>/<%= folder %>.json"
+  },
+  "explode": {
+    "input": "<%= config.get('paths.mwavs') %>/**/*.wav",
+    "output": "<%= config.get('paths.folders') %>/<%= folder %>/<%= $.pad(tracknum,2) %>.<%= folder %>.wav"
+  },
+  "als2json": {
+    "input": "<%= config.get('paths.als') %>/**/*.als",
+    "output": "<%= config.get('paths.als') %>/<%= folder %>/<%= folder %>.als.json"
+  },
+  "als2daw": {
+    "input": "<%= config.get('paths.als') %>/**/*.als.json",
+    "output": "<%= config.get('paths.als') %>/<%= folder %>/<%= folder %>.daw.json"
+  }
+}

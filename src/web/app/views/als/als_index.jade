@@ -1,0 +1,5 @@
+div(k-als-projects='')
+  h1 Ableton Projects
+  ul
+    li(ng-repeat='project in projects')
+      a(href='#/als/project/{{ project }}') {{ project }}

@@ -1,0 +1,8 @@
+.k-play-button {
+  width: 20px;
+  position: relative;
+}
+.loading-bar {
+  height: 20px;
+  background-color: white;
+}

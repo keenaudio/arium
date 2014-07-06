@@ -1,0 +1,45 @@
+extends ../layouts/master
+
+block head
+  if jsonStr
+    script(type='text/javascript').
+      var ALS_JSON = !{ jsonStr };
+      var TRACKS = {};
+
+block content
+  table
+    tr
+      td
+        ul
+          each project in projects
+            li
+              a(href='/als/#{ project }') #{ project }
+              span | 
+              a(href='/json/samples/#{ project }') (samples.json)
+              span | 
+              a(href='/daw/?data=#{ encodeURIComponent("/json/samples/" + project) }') (DAW)
+      if json
+        td
+          - var tracks=json.Ableton.LiveSet[0].Tracks[0].AudioTrack
+          ul
+            each track in tracks
+              li.track
+                - var trackName=track.Name[0].UserName[0].$.Value
+                script(type='text/javascript').
+                  var TRACKS['#{trackName}'] = { 
+                    all: !{ JSON.stringify(Object.keys(track)) },
+                    clips: !{ JSON.stringify(Object.keys(track.ClipSlotsListWrapper[0].$))}
+                  };
+
+                div.track-name #{ trackName}
+                  ul
+                    - var slots=track.DeviceChain[0].MainSequencer[0].ClipSlotList[0].ClipSlot;
+                    each slot in slots
+                        - var clip=slot.ClipSlot[0].Value[0];
+                        if clip.AudioClip
+                          - var fileName=clip.AudioClip[0].SampleRef[0].FileRef[0].Name[0].$.Value
+                          li.clip
+                            span #{fileName}
+
+
+

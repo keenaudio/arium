@@ -1,0 +1,23 @@
+div.main-nav
+  .navbar.navbar-inverse
+    ul.nav.nav-pills
+      li
+        a.home(href="/") Home
+      li
+        a(ng-click="openProject()") Open...
+      li
+        a(ng-click="export()") Export
+      li
+        a(href='#') Save
+      li
+        a#step-backward(href='#')
+          i.glyphicon.glyphicon-step-backward.icon-white
+      li
+        a#playPause(ng-click="playPause()")
+          i.glyphicon.glyphicon-play.icon-white
+      li
+        a#stop(ng-click='stop()')
+          i.glyphicon.glyphicon-stop.icon-white
+  div.project-header
+    span.project-name {{ project.name }}
+    span.label.label-default {{ project.type }}

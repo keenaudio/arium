@@ -1,0 +1,9 @@
+node_modules
+bower_components
+inbox
+library
+outbox
+.tmp
+*.mogg
+src/config/*!{defaults}.json
+.npm-debug.log

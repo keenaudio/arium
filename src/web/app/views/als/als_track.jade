@@ -1,0 +1,4 @@
+div.track 
+  div.track-header(ng-if='showHeader') {{ name }}
+  div(ng-repeat='slot in slots')
+    div(k-als-clip-slot='', slot='slot')

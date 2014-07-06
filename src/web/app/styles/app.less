@@ -1,0 +1,157 @@
+@import "daw";
+@import "themes/default";
+
+#app {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  overflow: hidden;
+}
+
+table.tracks {
+  border: 1px #ddd solid;
+  vertical-align: top;
+}
+
+table.tracks > tbody > tr > th,
+td.scene-label {
+  padding: 10px;
+  border-style: solid;
+}
+
+table.tracks > tbody > tr > td {
+/*  padding: 10px;*/
+  border: 1px #777 solid;
+}
+
+table.header > tbody > tr > td {
+  padding: 5px;
+}
+
+td.larger {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+td.smaller {
+  font-size: smaller;
+  font-weight: lighter;
+}
+
+
+/*.play-clip {
+  background-color: #777;
+  border: 1px #999 solid;
+  white-space: nowrap;
+  margin: 5px;
+  text-align: center;
+}
+*/
+/*.play-clip > table {
+  background: transparent !important;
+}*/
+
+
+.track-mixer-spacer {
+  display: block;
+  height: 200px;
+}
+
+.scroll-container {
+  overflow: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.scroll-container.scroll-x {
+  overflow-y: hidden;
+}
+
+.scroll-container.scroll-y {
+  overflow-x: hidden;
+}
+
+
+.scroll-container.h100p {
+  max-height: none;
+  height: 100% !important;
+}
+
+
+.main-nav {
+  vertical-align: top;
+}
+.main-nav > .navbar {
+  display: inline-block;
+  height: 50px;
+}
+
+
+
+.project {
+  overflow: hidden;
+}
+
+.project-header {
+  height: 50px;
+  display: inline-block;
+  padding-left: 20px;
+/*  border-bottom: 2px #CCC solid;
+*/  overflow: hidden;
+vertical-align: top;
+line-height: 50px;
+}
+
+.project-name {
+  font-size: 2em;
+  font-weight: bold;
+  margin-right: 20px;
+}
+.project-content {
+  position: absolute;
+  top: 80px;
+  bottom: 0px;
+  width: 100%;
+}
+
+
+.overlay-container {
+  text-align: center;
+  overflow: hidden;
+}
+
+.overlay-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 80%;
+  height: 80%;
+}
+
+.overlay-content {
+  min-height: 40%;
+  // max-width: 80%;
+  // max-height: 80%;
+  position: relative;
+  left: -50%;
+  top: -50%;
+}
+
+.overlay-close {
+  position: absolute;
+  right: -30px;
+  top: -30px;
+}
+
+.export-view {
+  min-height: 200px;
+  height: 100%;
+  padding: 20px;
+}
+.export-text {
+  width: 100%;
+  min-height: 200px;
+}

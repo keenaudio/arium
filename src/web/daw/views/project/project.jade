@@ -1,0 +1,26 @@
+div.project.relative.h100p
+  .track-list
+    .scroll-container.relative
+      .project-grid.scroll-content
+        .track-headers.grid-row.short
+          .grid-cell.short(ng-repeat='(index, track) in project.tracks')
+            div(daw-track-header='', track='track')
+        .track-clips.grid-row(ng-repeat='set in project.sets')
+          .grid-cell(ng-repeat='track in mixer.tracks')
+            div.h100p(daw-play-clip='', clip='track.getClip(set.id)')
+        .set-bg
+        .set-labels
+           .grid-cell(ng-repeat='set in project.sets')
+              div.h100p(daw-set='', set='set')
+        .track-mixers.grid-row.tall
+          .grid-cell.tall(ng-repeat='track in mixer.tracks')
+             .track-mixer(daw-track-mixer='', track='track')
+
+  .corner-controls.grid-row.short
+    .grid-cell.short
+       button.btn.btn-primary(ng-click='addTrack()', type='button') [+] Add Track
+
+  .master-mixer.grid-row.tall
+    .grid-cell.tall
+      .master-controls(daw-master-controls='')
+

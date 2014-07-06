@@ -1,0 +1,71 @@
+extends ../layouts/master
+
+block head
+  link(rel="stylesheet", type="text/css", href="/bower_components/jquery-ui/themes/eggplant/jquery-ui.css")
+  //link(rel="stylesheet", type="text/css", href="/bower_components/jquery-ui/themes/smoothness/jquery.ui.theme.css")
+
+
+  link(rel="stylesheet", type="text/css", href="/daw/components/components.css")
+  link(rel="stylesheet", type="text/css", href="styles/app.css")
+  //script(type="text/javascript", src="/bower_components/jquery-ui/ui/jquery-ui.js")
+  script(type='text/javascript').
+    var serverConfig = !{ JSON.stringify(clientConfig, null, 2) };
+    
+block header
+  div(k-main-nav='')
+
+block overlay
+  .overlay-container.w100p.h100p(ng-if="overlay")
+    .overlay-center
+      .overlay-content(k-overlay='')
+        .overlay-close
+          a.btn.btn-lg.btn-danger(ng-click='closeOverlay()')
+            span.glyphicon.glyphicon-remove-sign
+
+block content
+  #app
+    div.h100p(ng-view="")
+
+  script(type='text/javascript', data-main='/index.js', src='/bower_components/requirejs/require.js')
+
+  // script(src="/lib/wavesurfer/wavesurfer.js")
+  // script(src="/lib/wavesurfer/audio.js")
+  // script(src="/lib/wavesurfer/webaudio.js")
+  // script(src="/lib/wavesurfer/drawer.js")
+
+  // script(src="/lib/common/assert.js")
+  // script(src="/lib/common/config.js")
+  // script(src="/lib/formats/als.js")
+  // script(src="/lib/formats/daw.js")
+  // script(src="/lib/formats/project.js")
+
+  // script(src="/lib/audio/audio.js")
+  // script(src="/lib/audio/sample.js")
+  // script(src="/lib/audio/track.js")
+  // script(src="/lib/audio/mixer.js")
+  // script(src="/lib/audio/scheduler.js")
+  // //script(src="/lib/audio/player.js")
+
+  // script(src="/bower_components/underscore/underscore.js")
+  // script(src="/bower_components/angular/angular.js")
+  // script(src="/bower_components/angular-route/angular-route.js")
+  // script(src="/bower_components/angular-ui-slider/src/slider.js")
+  // script(src="/lib/ng/ng.js")
+  // script(src="/lib/ng/modules/config.js")
+
+  // script(src="scripts/player_model.js")
+  // script(src="scripts/app.js")
+  // script(src="scripts/app-templates.js")
+  // script(src="views/main/main.js")
+  // script(src="views/als/als.js")
+  // script(src="views/folders/folders.js")
+  // script(src="views/project/project.js")
+  // script(src="components/play_button/play_button.js")
+  // script(src="components/play_clip/play_clip.js")
+  // script(src="components/track_header/track_header.js")
+  // script(src="components/main_nav/main_nav.js")
+  // script(src="components/fader/fader.js")
+  // script(src="components/set/set.js")
+  // script(src="components/vu_meter/vu_meter.js")
+
+

@@ -1,0 +1,35 @@
+
+.grid-cell {
+  width: 160px;
+  height: 80px;
+  /*background: orange;
+*/  
+  display: inline-block;
+  border: 1px #222 solid;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grid-cell.tall,
+.grid-row.tall {
+  height: 240px;
+}
+
+.grid-cell.short,
+.grid-row.short {
+  height: 40px;
+}
+
+.grid-row {
+  display: block;
+  /*background: blue;
+*/  height: 80px;
+  width: auto;
+  white-space: nowrap;
+}
+
+.grid-col {
+  width: 160px;
+  min-height: 100%;
+  display: inline-block;
+}

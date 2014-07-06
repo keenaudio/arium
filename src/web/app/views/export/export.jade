@@ -1,0 +1,9 @@
+div.export-view(k-export='')
+  .larger Export Mix
+  div
+    textarea.export-text {{ text }}
+  div
+    input.w100p(type='text', ng-model='saveAs', placeholder='Name to export as...')
+  div.p20.clearfix
+    button.btn.btn-default.pull-left Cancel
+    button.btn.btn-primary.pull-right(ng-click="post()") Post / Create Remix
