@@ -1,0 +1,35 @@
+extends layouts/master
+
+block head
+
+  <!-- build:css static/app.css -->
+  link(rel="stylesheet", type="text/css", href="daw/components/components.css")
+  link(rel="stylesheet", type="text/css", href="app/styles/app.css")
+  <!-- endbuild -->
+
+
+  //script(type="text/javascript", src="/bower_components/jquery-ui/ui/jquery-ui.js")
+  script(type='text/javascript').
+    var serverConfig = !{ JSON.stringify(clientConfig, null, 2) };
+    
+block header
+  div(k-main-nav='')
+
+block overlay
+  .overlay-container.w100p.h100p(ng-if="overlay")
+    .overlay-center
+      .overlay-content(k-overlay='')
+        .overlay-close
+          a.btn.btn-lg.btn-danger(ng-click='closeOverlay()')
+            span.glyphicon.glyphicon-remove-sign
+
+block content
+  - var requireJS = CDN ? "//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" : "/bower_components/requirejs/require.js"
+
+  #app
+    div.h100p(ng-view="")
+
+  script(type='text/javascript', data-main='index.js', src='#{ requireJS }')
+
+
+

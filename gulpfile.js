@@ -6,10 +6,17 @@ var path = require('path');
 
 var $ = require('./src/gulp'); // Gulp helper object
 
+// Build helpers
+$.jsmacro = require('./tools/gulp/jsmacro');
+$.html2js = require('./tools/gulp/html2js');
+
 // Tasks
 
 gulp.task('clean', function() {
-  return gulp.src(".tmp", {read: false}).pipe($.clean());
+  return gulp.src([
+    ".tmp", 
+    "dist",
+  ], {read: false}).pipe($.clean());
 });
 
 gulp.task('mkdirs', $.mkdirs($.config.get("create_dirs")));
@@ -28,6 +35,155 @@ gulp.task('default', ['prepare'], function(cb) {
     cb);
 });
 
+gulp.task('copy-web-tmp', function() {
+  var jsFilter = $.filter(['**/*.js', '!build.js']);
+
+  return gulp.src([
+    'src/*lib/**/*.{js,css}',
+    'src/web/**/*.{js,css}'
+  ])
+    .pipe(jsFilter)
+    .pipe($.ngmin())
+    .pipe(jsFilter.restore())
+    .pipe(gulp.dest('.tmp/web'));
+});
+
+gulp.task('copy-web-dist', function() {
+  return gulp.src([
+    'static*/**/*'
+  ], { cwd: '.tmp/web' })
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('require-js', function(cb) {
+  $.exec(['node_modules/requirejs/bin/r.js -o .tmp/web/build.js'], {}, cb);
+});
+
+gulp.task('build-html-tmp', function() {
+
+  var htmlFilter = $.filter("**/*.html");
+  return gulp.src("src/web/**/index.jade")
+    .pipe($.jade({
+      pretty: true,
+      locals: {
+        config: $.config,
+        clientConfig: {
+          buildTime: new Date().getTime()
+        },
+        CDN: true
+      }
+    }))
+    .pipe(htmlFilter)
+    .pipe($.replace(/<!--/g, "\n<!--"))
+    .pipe(gulp.dest('.tmp/web'))
+    .pipe(htmlFilter.restore());
+
+});
+
+gulp.task('build-html-dist', function() {
+
+  return gulp.src(".tmp/web/index.html")
+    .pipe($.useref.assets({
+      searchPath: [
+         '.tmp/web',
+         './'
+        // './../../'
+        // './',
+        // './src/web'
+      ]
+    }))
+    //.pipe($.debug({verbose: true}))
+    //.pipe($.if('*.css'))
+    .pipe($.useref.restore())
+    .pipe($.useref())
+    .pipe($.if('*.html', $.rename({
+      dirname: './'
+    })))
+    .pipe(gulp.dest('dist'));
+
+
+});
+
+gulp.task('build-web-tmp', function() {
+  var coffeeFilter = $.filter("**/*.coffee");
+  var jsFilter = $.filter("**/*.js");
+  var lessFilter = $.filter("**/*.less");
+  var cssFilter = $.filter("**/*.css");
+  var jadeFilter = $.filter("**/*.jade")
+
+  return gulp.src([
+    'src/web/**/*.{coffee,less}',
+    'src/*lib/**/*.{coffee,less}'
+    //'!src/config/*.!{default}.json' // skip user config json files
+  ])
+    .pipe(coffeeFilter)
+    .pipe($.jsmacro({
+      regex: {
+        strip: /(.*)#[\@|#]strip.*/ig
+      }
+    }))
+    .pipe($.coffee({ bare: true }).on('error', $.util.log))
+    .pipe(coffeeFilter.restore())
+    .pipe(lessFilter)
+    .pipe($.less({
+        paths: path.join(__dirname, 'src/web/app/styles'),
+        sourceMapBasepath: path.join(__dirname, 'web')
+      }).on('error', $.util.log))
+    .pipe(lessFilter.restore())
+    .pipe(jsFilter)
+    .pipe($.ngmin())
+    .pipe(jsFilter.restore())
+  
+    // .pipe(jadeFilter)
+   // .pipe($.debug())
+    // .pipe(jadeFilter.restore())
+    .pipe(gulp.dest('.tmp/web'));
+});
+
+gulp.task('build', ['clean'], function(cb) {
+  $.sequence(
+    'copy-web-tmp',
+    'app-templates',
+    'daw-templates',
+     'build-web-tmp',
+     'build-html-tmp',
+     'require-js',
+     'build-html-dist',
+     'copy-web-dist',
+  cb);
+});
+
+gulp.task('server', ['clean'], function(cb) {
+  // start LR server
+  livereload();
+  console.log("$: " + JSON.stringify($));
+  $.sequence('app-templates', 'daw-templates', 'coffee', 'less', function() {
+    $.util.log("Now starting server and watch");
+    $.gulp.start('dev-server', 'watch', function() {
+      $.util.log("Somehow it is all over?");
+    })
+
+  });
+});
+
+gulp.task('server:dist', ['build'], function(cb) {
+  $.sequence('dist-server');
+})
+
+var serverArgs = function(dist) {
+  // Build command line args for express server
+  var args = [];
+  args.push("--port=8008");
+  if ($.args['server-url']) {
+    args.push("--server-url=" + $.args['server-url']);
+  }
+
+  if (dist) {
+    //args.push("--config-file=../src/config.json");
+  }
+  return args;
+};
+
 gulp.task("app-templates", function() {
 
   var jadeVars = {
@@ -39,12 +195,12 @@ gulp.task("app-templates", function() {
   return gulp.src("{views,components}/**/*.jade", { cwd: "src/web/app"})
    // .pipe(jadeFilter)
    // .pipe($.jsmacro($.options.jsmacro.client)) // unlike html, jade will be processed with jsmacro
-   .pipe($.debug({ verbose: true }))
+  // .pipe($.debug({ verbose: true }))
 
     .pipe($.jade({ pretty: true, locals: jadeVars }))
-    .pipe($.debug({ verbose: true }))
+   // .pipe($.debug({ verbose: true }))
     //.pipe(jadeFilter.restore())
-    .pipe($.ngHtml2js({
+    .pipe($.html2js({
         moduleName: "app-templates",
        // declareModule: false,
         rename: function(filename) {
@@ -52,12 +208,12 @@ gulp.task("app-templates", function() {
         }
       //  stripPrefix: config.cwd
     }))
-    .pipe($.concatUtil('templates.js'))
+  //  .pipe($.concatUtil('templates.js'))
     .pipe($.rename({
       dirname: "web/app",
       basename: "templates"
     }))
-    .pipe($.debug({ verbose: true }))
+   // .pipe($.debug({ verbose: true }))
 
    // .pipe($.concat(config.module + '.js'))
     .pipe(gulp.dest(".tmp"))
@@ -76,12 +232,12 @@ gulp.task("daw-templates", function() {
   return gulp.src("{views,components}/**/*.jade", { cwd: "src/web/daw"})
    // .pipe(jadeFilter)
    // .pipe($.jsmacro($.options.jsmacro.client)) // unlike html, jade will be processed with jsmacro
-   .pipe($.debug({ verbose: true }))
+   //.pipe($.debug({ verbose: true }))
 
     .pipe($.jade({ pretty: true, locals: jadeVars }))
-    .pipe($.debug({ verbose: true }))
+   // .pipe($.debug({ verbose: true }))
     //.pipe(jadeFilter.restore())
-    .pipe($.ngHtml2js({
+    .pipe($.html2js({
         moduleName: "daw-templates",
        // declareModule: false,
         rename: function(filename) {
@@ -89,12 +245,12 @@ gulp.task("daw-templates", function() {
         }
       //  stripPrefix: config.cwd
     }))
-    .pipe($.concatUtil('templates.js'))
+  //  .pipe($.concatUtil('templates.js'))
     .pipe($.rename({
       dirname: "web/daw",
       basename: "templates"
     }))
-    .pipe($.debug({ verbose: true }))
+   // .pipe($.debug({ verbose: true }))
 
    // .pipe($.concat(config.module + '.js'))
     .pipe(gulp.dest(".tmp"))
@@ -173,40 +329,6 @@ gulp.task('watch', function(cb) {
     //.pipe(lr);
 });
 
-gulp.task('build', function(cb) {
-  runSequence('clean', cb);
-});
-
-gulp.task('server', ['clean'], function(cb) {
-  // start LR server
-  livereload();
-  console.log("$: " + JSON.stringify($));
-  $.sequence('app-templates', 'daw-templates', 'coffee', 'less', function() {
-    $.util.log("Now starting server and watch");
-    $.gulp.start('dev-server', 'watch', function() {
-      $.util.log("Somehow it is all over?");
-    })
-
-  });
-});
-
-gulp.task('server:dist', ['build'], function(cb) {
-  $.sequence('dist-server');
-})
-
-var serverArgs = function(dist) {
-  // Build command line args for express server
-  var args = [];
-  args.push("--port=8008");
-  if ($.args['server-url']) {
-    args.push("--server-url=" + $.args['server-url']);
-  }
-
-  if (dist) {
-    //args.push("--config-file=../src/config.json");
-  }
-  return args;
-};
 
 gulp.task('dev-server', function(cb) {
   var lr = livereload();

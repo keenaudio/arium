@@ -1,3 +1,5 @@
+- var requireJS = CDN ? "//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" : "/bower_components/requirejs/require.js"
+
 extends ../layouts/master
 
 block head
@@ -26,46 +28,7 @@ block content
   #app
     div.h100p(ng-view="")
 
-  script(type='text/javascript', data-main='/index.js', src='/bower_components/requirejs/require.js')
+  script(type='text/javascript', data-main='/index.js', src='#{ requireJS }')
 
-  // script(src="/lib/wavesurfer/wavesurfer.js")
-  // script(src="/lib/wavesurfer/audio.js")
-  // script(src="/lib/wavesurfer/webaudio.js")
-  // script(src="/lib/wavesurfer/drawer.js")
-
-  // script(src="/lib/common/assert.js")
-  // script(src="/lib/common/config.js")
-  // script(src="/lib/formats/als.js")
-  // script(src="/lib/formats/daw.js")
-  // script(src="/lib/formats/project.js")
-
-  // script(src="/lib/audio/audio.js")
-  // script(src="/lib/audio/sample.js")
-  // script(src="/lib/audio/track.js")
-  // script(src="/lib/audio/mixer.js")
-  // script(src="/lib/audio/scheduler.js")
-  // //script(src="/lib/audio/player.js")
-
-  // script(src="/bower_components/underscore/underscore.js")
-  // script(src="/bower_components/angular/angular.js")
-  // script(src="/bower_components/angular-route/angular-route.js")
-  // script(src="/bower_components/angular-ui-slider/src/slider.js")
-  // script(src="/lib/ng/ng.js")
-  // script(src="/lib/ng/modules/config.js")
-
-  // script(src="scripts/player_model.js")
-  // script(src="scripts/app.js")
-  // script(src="scripts/app-templates.js")
-  // script(src="views/main/main.js")
-  // script(src="views/als/als.js")
-  // script(src="views/folders/folders.js")
-  // script(src="views/project/project.js")
-  // script(src="components/play_button/play_button.js")
-  // script(src="components/play_clip/play_clip.js")
-  // script(src="components/track_header/track_header.js")
-  // script(src="components/main_nav/main_nav.js")
-  // script(src="components/fader/fader.js")
-  // script(src="components/set/set.js")
-  // script(src="components/vu_meter/vu_meter.js")
 
 

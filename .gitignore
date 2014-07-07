@@ -4,6 +4,7 @@ inbox
 library
 outbox
 .tmp
+dist
 *.mogg
 src/config/*!{defaults}.json
 .npm-debug.log

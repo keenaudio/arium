@@ -12,42 +12,52 @@ require.config
       name: "daw"
 
   paths:
-    ng: "/lib/ng"
-    audio: "/lib/audio"
-    formats: "/lib/formats"
+    "node.extend": "lib/common/merge"
+    ng: "lib/ng"
+    audio: "lib/audio"
+    formats: "lib/formats"
     # views: "../views"
     # components: "../components"
     # directives: "../directives"
     # appTemplates: "app-templates"
     #lib: "/lib"
-    merge: "/lib/common/merge"
-    assert: "/lib/common/assert"
-    dispatcher: "/lib/common/dispatcher"
+    #merge: "lib/common/merge"
+    assert: "lib/common/assert"
+    dispatcher: "lib/common/dispatcher"
 
     #tries to load jQuery from Google's CDN first and falls back
     #to load locally
     jquery: [
-      #"//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min"
-      "/bower_components/jquery/dist/jquery"
+      "bower_components/jquery/dist/jquery" #@strip
+      "//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min"
     ]
-    jqueryUI: "/bower_components/jquery-ui/ui/jquery-ui"
-    underscore: "/bower_components/underscore/underscore"
-    bootstrap: "/bower_components/bootstrap/dist/js/bootstrap"
+    jqueryUI: [
+      "bower_components/jquery-ui/ui/jquery-ui" #@strip
+      "//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min"
+    ]
+    underscore: [
+      "bower_components/underscore/underscore" #@strip
+      "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min"
+    ]
+    bootstrap: [
+      "bower_components/bootstrap/dist/js/bootstrap" #@strip
+      "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min"
+    ]
     angular: [
-     # "//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min"
-      "/bower_components/angular/angular"
+      "bower_components/angular/angular" #@strip
+      "//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular"
     ]
     angularRoute: [
-      #"//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular-route.min"
-      "/bower_components/angular-route/angular-route"
+      "bower_components/angular-route/angular-route" #@strip
+      "//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular-route.min"
     ]
-    angularUISlider: "/bower_components/angular-ui-slider/src/slider"
+    angularUISlider: "bower_components/angular-ui-slider/src/slider"
 
     #appIndex: "/app/index"
-    appTemplates: "/app/templates"
+    appTemplates: "app/templates"
 
     #dawIndex: "/daw/index"
-    dawTemplates: "/daw/templates"
+    dawTemplates: "daw/templates"
 
 
   shim:

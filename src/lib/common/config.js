@@ -1,12 +1,6 @@
-var merge = 'merge'
-if (typeof define !== 'function') { 
-  var define = require('amdefine')(module);
-  merge = 'node.extend';
-}
+if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-console.log("CONFIG");
-
-define(['assert', 'underscore', merge], function(assert, _, merge) {
+define(['assert', 'underscore', 'node.extend'], function(assert, _, merge) {
 
 //@if LOG
 var _ls = "Lib.Config";

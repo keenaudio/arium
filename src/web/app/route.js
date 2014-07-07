@@ -53,7 +53,7 @@ module.exports = function(config) {
 
   app.use(function(req, res, next) {
     if (req.path === '/') {
-      res.render('app/app.jade', {
+      res.render('index.jade', {
         clientConfig: clientConfig
       });
     } else {

@@ -1,6 +1,6 @@
 define [
   'audio/loadable'
-  'merge'
+  'node.extend'
   'audio/buffer'
 ], (Loadable, merge, AudioBuffer) ->
   class Sample extends Loadable
