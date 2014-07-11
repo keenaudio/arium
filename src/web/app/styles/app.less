@@ -132,12 +132,14 @@ line-height: 50px;
 }
 
 .overlay-content {
-  min-height: 40%;
+  // min-height: 40%;
   // max-width: 80%;
   // max-height: 80%;
   position: relative;
-  left: -50%;
-  top: -50%;
+  display: inline-block;
+  // left: -50%;
+  // top: -50%;
+  margin: 80px auto;
 }
 
 .overlay-close {
@@ -154,4 +156,22 @@ line-height: 50px;
 .export-text {
   width: 100%;
   min-height: 200px;
+}
+
+.open-view-lists {
+  padding: 20px;
+}
+.open-view-lists > .folder-list {
+  // width: 40%;
+  float: left;
+  margin-right: 20px;
+}
+
+.open-view-lists > .file-list {
+  // width: 40%;
+  float: left;
+}
+
+.open-view-buttons {
+  background: #ccc;
 }

@@ -18,7 +18,7 @@ define [
 
         if overlay
           console.log "Creating new overlay"
-          $html = $('<div class="h100p" ng-include="\'views/' + overlay.name + '/' + overlay.name + '.jade\'"/>')
+          $html = $('<div class="h100p white-rounded" ng-include="\'views/' + overlay.name + '/' + overlay.name + '.jade\'"/>')
           $child = $scope.$new()
           $.extend $child, overlay.props
           $overlay = $compile($html)($child)

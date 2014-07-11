@@ -1,4 +1,6 @@
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+if (typeof define !== 'function') {
+  var define = require('amdefine')(module)
+}
 
 define(['underscore', 'assert'], function(_, assert) {
 
@@ -8,6 +10,30 @@ define(['underscore', 'assert'], function(_, assert) {
     this.sets = [];
     this.tracks = [];
   };
+
+  Project.fromJSON = function(obj, baseUrl) {
+    var project = new Project(obj.name, obj.type);
+    var tracks = obj.tracks;
+    tracks.forEach(function(track, i) {
+      var pt = new Project.Track(track.name, track.type);
+      $.extend(pt, track);
+      project.addTrack(pt);
+    });
+    var sets = obj.sets;
+    sets.forEach(function(set, i) {
+      var ps = new Project.Set(set.name, set.type);
+      $.extend(ps, set);
+      var samples = ps.samples;
+      $.each(samples, function(i, sample) {
+        if (!sample.url) {
+          assert(sample.fileName); //@strip
+          sample.url = baseUrl + sample.fileName;
+        }
+      });
+      project.addSet(ps);
+    });
+    return project;
+  }
 
   Project.fromFiles = function(name, files, baseUrl) {
     baseUrl = baseUrl || "";
@@ -26,7 +52,7 @@ define(['underscore', 'assert'], function(_, assert) {
       };
     });
 
-  
+
     var project = new Project(name, "files")
     tracks.forEach(function(track) {
       project.addTrack(new Track(track.name, "file"))

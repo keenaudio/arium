@@ -18,8 +18,10 @@ define [
     "./views/main/main"
     "./views/als/als"
     "./views/folders/folders"
+    "./views/library/library"
     # "views/project/project"
     "./views/export/export"
+    "./views/open/open"
     # "components/fader/fader"
     "./components/main_nav/main_nav"
 ], (angular, config, ngRoute, appTemplates, app) ->

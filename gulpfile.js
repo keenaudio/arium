@@ -14,15 +14,17 @@ $.html2js = require('./tools/gulp/html2js');
 
 gulp.task('clean', function() {
   return gulp.src([
-    ".tmp", 
+    ".tmp",
     "dist",
-  ], {read: false}).pipe($.clean());
+  ], {
+    read: false
+  }).pipe($.clean());
 });
 
 gulp.task('mkdirs', $.mkdirs($.config.get("create_dirs")));
 
 
-gulp.task('prepare',function(cb) {
+gulp.task('prepare', function(cb) {
   $.sequence('clean', 'mkdirs', cb);
 });
 
@@ -39,9 +41,9 @@ gulp.task('copy-web-tmp', function() {
   var jsFilter = $.filter(['**/*.js', '!build.js']);
 
   return gulp.src([
-    'src/*lib/**/*.{js,css}',
-    'src/web/**/*.{js,css}'
-  ])
+      'src/*lib/**/*.{js,css}',
+      'src/web/**/*.{js,css}'
+    ])
     .pipe(jsFilter)
     .pipe($.ngmin())
     .pipe(jsFilter.restore())
@@ -50,8 +52,10 @@ gulp.task('copy-web-tmp', function() {
 
 gulp.task('copy-web-dist', function() {
   return gulp.src([
-    'static*/**/*'
-  ], { cwd: '.tmp/web' })
+      'static*/**/*'
+    ], {
+      cwd: '.tmp/web'
+    })
     .pipe(gulp.dest('dist'));
 });
 
@@ -85,8 +89,8 @@ gulp.task('build-html-dist', function() {
   return gulp.src(".tmp/web/index.html")
     .pipe($.useref.assets({
       searchPath: [
-         '.tmp/web',
-         './'
+        '.tmp/web',
+        './'
         // './../../'
         // './',
         // './src/web'
@@ -112,32 +116,34 @@ gulp.task('build-web-tmp', function() {
   var jadeFilter = $.filter("**/*.jade")
 
   return gulp.src([
-    'src/web/**/*.{coffee,less}',
-    'src/*lib/**/*.{coffee,less}'
-    //'!src/config/*.!{default}.json' // skip user config json files
-  ])
+      'src/web/**/*.{coffee,less}',
+      'src/*lib/**/*.{coffee,less}'
+      //'!src/config/*.!{default}.json' // skip user config json files
+    ])
     .pipe(coffeeFilter)
     .pipe($.jsmacro({
       regex: {
         strip: /(.*)#[\@|#]strip.*/ig
       }
     }))
-    .pipe($.coffee({ bare: true }).on('error', $.util.log))
+    .pipe($.coffee({
+      bare: true
+    }).on('error', $.util.log))
     .pipe(coffeeFilter.restore())
     .pipe(lessFilter)
     .pipe($.less({
-        paths: path.join(__dirname, 'src/web/app/styles'),
-        sourceMapBasepath: path.join(__dirname, 'web')
-      }).on('error', $.util.log))
+      paths: path.join(__dirname, 'src/web/app/styles'),
+      sourceMapBasepath: path.join(__dirname, 'web')
+    }).on('error', $.util.log))
     .pipe(lessFilter.restore())
     .pipe(jsFilter)
     .pipe($.ngmin())
     .pipe(jsFilter.restore())
-  
-    // .pipe(jadeFilter)
-   // .pipe($.debug())
-    // .pipe(jadeFilter.restore())
-    .pipe(gulp.dest('.tmp/web'));
+
+  // .pipe(jadeFilter)
+  // .pipe($.debug())
+  // .pipe(jadeFilter.restore())
+  .pipe(gulp.dest('.tmp/web'));
 });
 
 gulp.task('build', ['clean'], function(cb) {
@@ -145,12 +151,12 @@ gulp.task('build', ['clean'], function(cb) {
     'copy-web-tmp',
     'app-templates',
     'daw-templates',
-     'build-web-tmp',
-     'build-html-tmp',
-     'require-js',
-     'build-html-dist',
-     'copy-web-dist',
-  cb);
+    'build-web-tmp',
+    'build-html-tmp',
+    'require-js',
+    'build-html-dist',
+    'copy-web-dist',
+    cb);
 });
 
 gulp.task('server', ['clean'], function(cb) {
@@ -192,32 +198,39 @@ gulp.task("app-templates", function() {
     baseUrl: $.config.get('routes.app')
   };
 
-  return gulp.src("{views,components}/**/*.jade", { cwd: "src/web/app"})
-   // .pipe(jadeFilter)
-   // .pipe($.jsmacro($.options.jsmacro.client)) // unlike html, jade will be processed with jsmacro
+  return gulp.src("{views,components}/**/*.jade", {
+      cwd: "src/web/app"
+    })
+    // .pipe(jadeFilter)
+    // .pipe($.jsmacro($.options.jsmacro.client)) // unlike html, jade will be processed with jsmacro
+    // .pipe($.debug({ verbose: true }))
+
+  .pipe($.jade({
+    pretty: true,
+    locals: jadeVars
+  }))
+  // .pipe($.debug({ verbose: true }))
+  //.pipe(jadeFilter.restore())
+  .pipe($.html2js({
+    moduleName: "app-templates",
+    // declareModule: false,
+    rename: function(filename) {
+      return filename.replace('.html', '.jade');
+    }
+    //  stripPrefix: config.cwd
+  }))
+  //  .pipe($.concatUtil('templates.js'))
+  .pipe($.rename({
+    dirname: "web/app",
+    basename: "templates"
+  }))
   // .pipe($.debug({ verbose: true }))
 
-    .pipe($.jade({ pretty: true, locals: jadeVars }))
-   // .pipe($.debug({ verbose: true }))
-    //.pipe(jadeFilter.restore())
-    .pipe($.html2js({
-        moduleName: "app-templates",
-       // declareModule: false,
-        rename: function(filename) {
-           return filename.replace('.html', '.jade');
-        }
-      //  stripPrefix: config.cwd
-    }))
-  //  .pipe($.concatUtil('templates.js'))
-    .pipe($.rename({
-      dirname: "web/app",
-      basename: "templates"
-    }))
-   // .pipe($.debug({ verbose: true }))
-
-   // .pipe($.concat(config.module + '.js'))
-    .pipe(gulp.dest(".tmp"))
-    .pipe($.size({ showFiles: true }));
+  // .pipe($.concat(config.module + '.js'))
+  .pipe(gulp.dest(".tmp"))
+    .pipe($.size({
+      showFiles: true
+    }));
 
 });
 
@@ -229,32 +242,39 @@ gulp.task("daw-templates", function() {
     baseUrl: $.config.get('routes.app')
   };
 
-  return gulp.src("{views,components}/**/*.jade", { cwd: "src/web/daw"})
-   // .pipe(jadeFilter)
-   // .pipe($.jsmacro($.options.jsmacro.client)) // unlike html, jade will be processed with jsmacro
-   //.pipe($.debug({ verbose: true }))
+  return gulp.src("{views,components}/**/*.jade", {
+      cwd: "src/web/daw"
+    })
+    // .pipe(jadeFilter)
+    // .pipe($.jsmacro($.options.jsmacro.client)) // unlike html, jade will be processed with jsmacro
+    //.pipe($.debug({ verbose: true }))
 
-    .pipe($.jade({ pretty: true, locals: jadeVars }))
-   // .pipe($.debug({ verbose: true }))
-    //.pipe(jadeFilter.restore())
-    .pipe($.html2js({
-        moduleName: "daw-templates",
-       // declareModule: false,
-        rename: function(filename) {
-           return filename.replace('.html', '.jade');
-        }
-      //  stripPrefix: config.cwd
-    }))
+  .pipe($.jade({
+    pretty: true,
+    locals: jadeVars
+  }))
+  // .pipe($.debug({ verbose: true }))
+  //.pipe(jadeFilter.restore())
+  .pipe($.html2js({
+    moduleName: "daw-templates",
+    // declareModule: false,
+    rename: function(filename) {
+      return filename.replace('.html', '.jade');
+    }
+    //  stripPrefix: config.cwd
+  }))
   //  .pipe($.concatUtil('templates.js'))
-    .pipe($.rename({
-      dirname: "web/daw",
-      basename: "templates"
-    }))
-   // .pipe($.debug({ verbose: true }))
+  .pipe($.rename({
+    dirname: "web/daw",
+    basename: "templates"
+  }))
+  // .pipe($.debug({ verbose: true }))
 
-   // .pipe($.concat(config.module + '.js'))
-    .pipe(gulp.dest(".tmp"))
-    .pipe($.size({ showFiles: true }));
+  // .pipe($.concat(config.module + '.js'))
+  .pipe(gulp.dest(".tmp"))
+    .pipe($.size({
+      showFiles: true
+    }));
 
 });
 
@@ -264,13 +284,17 @@ gulp.task('coffee', function() {
   var srcRoot = $.config.get('paths.web');
   $.util.log("Starting coffee, source root: " + srcRoot);
   return gulp.src('src/{lib,server,web}/**/*.coffee')
-    .pipe($.changed('.tmp', { 
+    .pipe($.changed('.tmp', {
       extension: ".js",
       hasChanged: $.needBuild
     }))
     .pipe($.sourcemaps.init())
-      .pipe($.coffee({ bare: true }).on('error', $.util.log))
-    .pipe($.sourcemaps.write({ sourceRoot: "./" }))
+    .pipe($.coffee({
+      bare: true
+    }).on('error', $.util.log))
+    .pipe($.sourcemaps.write({
+      sourceRoot: "./"
+    }))
     .pipe(gulp.dest('.tmp'));
 
 });
@@ -278,23 +302,28 @@ gulp.task('coffee', function() {
 gulp.task('less', function() {
 
   return gulp.src('src/web/**/*.less')
-    .pipe($.changed('.tmp', { 
+    .pipe($.changed('.tmp', {
       extension: ".css",
       hasChanged: $.needBuild
     }))
-    .pipe($.debug({ verbose: true }))
+    .pipe($.debug({
+      verbose: true
+    }))
     .pipe($.sourcemaps.init())
-      .pipe($.less({
-        paths: path.join(__dirname, 'src/web/app/styles'),
-        sourceMapBasepath: path.join(__dirname, 'web')
-      }).on('error', $.util.log))
-    .pipe($.sourcemaps.write({ sourceRoot: '/' }))
+    .pipe($.less({
+      paths: path.join(__dirname, 'src/web/app/styles'),
+      sourceMapBasepath: path.join(__dirname, 'web')
+    }).on('error', $.util.log))
+    .pipe($.sourcemaps.write({
+      sourceRoot: '/'
+    }))
     .pipe(gulp.dest('.tmp/web'));
 
 });
 
 
 var lrServer;
+
 function livereload() {
   if (!lrServer) {
     var lrPort = $.config.get("ports.livereload");
@@ -307,26 +336,34 @@ function livereload() {
 
 gulp.task('watch', function(cb) {
 
-  gulp.watch('src/{lib,server,web}/**/*.coffee', { mode: 'poll'}, ['coffee']);
-  gulp.watch("src/web/app/**/*.jade", { mode: 'poll'}, ["app-templates"]); // recompile jade templates to JS on file save
-  gulp.watch("src/web/daw/**/*.jade", { mode: 'poll'}, ["daw-templates"]); 
-  gulp.watch('src/web/**/*.less', { mode: 'poll'}, ['less']);
+  gulp.watch('src/{lib,server,web}/**/*.coffee', {
+    mode: 'poll'
+  }, ['coffee']);
+  gulp.watch("src/web/app/**/*.jade", {
+    mode: 'poll'
+  }, ["app-templates"]); // recompile jade templates to JS on file save
+  gulp.watch("src/web/daw/**/*.jade", {
+    mode: 'poll'
+  }, ["daw-templates"]);
+  gulp.watch('src/web/**/*.less', {
+    mode: 'poll'
+  }, ['less']);
 
   var lr = livereload();
   gulp.watch([
-      "src/{web,.tmp,lib,static}/**/*",
-      "!**/*.{jade,coffee,less}"
-    ], { 
-      // glob: , 
-      // emitOnGlob: false, 
-      // emit: "all",
-     // mode: 'poll'
-    }, function(event) {
-      $.util.log('WATCH CHANGE: ' + event.type + ' ' + event.path);
-      lr.changed(event.path);
-    });
+    "{.tmp,src}/{web,lib,static}/**/*",
+    "!**/*.{jade,coffee,less}"
+  ], {
+    // glob: , 
+    // emitOnGlob: false, 
+    // emit: "all",
+    // mode: 'poll'
+  }, function(event) {
+    $.util.log('WATCH CHANGE: ' + event.type + ' ' + event.path);
+    lr.changed(event.path);
+  });
 
-    //.pipe(lr);
+  //.pipe(lr);
 });
 
 
@@ -337,8 +374,8 @@ gulp.task('dev-server', function(cb) {
 
   var env = $.merge(process.env, {
     NODE_ENV: 'development',
-  //  NODE_DEBUG: "livereload,express:*",
-   // DEBUG: "tinylr:*,send"
+    //  NODE_DEBUG: "livereload,express:*",
+    // DEBUG: "tinylr:*,send"
   });
 
   $.util.log("Server env: " + JSON.stringify(env, null, 2));
@@ -359,10 +396,10 @@ gulp.task('dev-server', function(cb) {
     emitOnGlob: false
   }, function(stream) {
     $.util.log("Sending LIVERELOAD event to all clients");
-   // setTimeout(function() {
-      //for (var i = 0; i < lrServers.length; i++) {
-        lr.changed("/");
-      //}
+    // setTimeout(function() {
+    //for (var i = 0; i < lrServers.length; i++) {
+    lr.changed("/");
+    //}
     //}, 2000);
   });
 
@@ -374,12 +411,12 @@ gulp.task('dev-server', function(cb) {
     ],
     timeout: 1000,
     emitOnGlob: false,
- //   passThrough: false
+    //   passThrough: false
   }, function(stream) {
     $.util.log("Server files changed, server will restart");
     //return stream;
   })
-  .pipe(server);
+    .pipe(server);
 
 });
 
@@ -395,9 +432,3 @@ gulp.task('dist-server', function(cb) {
       args: args
     }));
 });
-
-
-
-
-
-

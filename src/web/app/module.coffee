@@ -36,6 +36,8 @@ define [
       templateUrl: "views/als/als_index.jade"
     ).when("/als/project/:project",
       templateUrl: "views/als/als_project.jade"
+    ).when("/library/:folder/:file",
+      templateUrl: "views/library/library.jade"
     ).otherwise redirect: "/"
     return
 

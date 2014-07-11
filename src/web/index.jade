@@ -17,11 +17,11 @@ block header
 
 block overlay
   .overlay-container.w100p.h100p(ng-if="overlay")
-    .overlay-center
-      .overlay-content(k-overlay='')
-        .overlay-close
-          a.btn.btn-lg.btn-danger(ng-click='closeOverlay()')
-            span.glyphicon.glyphicon-remove-sign
+    //.overlay-center
+    .overlay-content(k-overlay='')
+      .overlay-close
+        a.btn.btn-lg.btn-danger(ng-click='closeOverlay()')
+          span.glyphicon.glyphicon-remove-sign
 
 block content
   - var requireJS = CDN ? "//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" : "/bower_components/requirejs/require.js"

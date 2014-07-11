@@ -5,6 +5,7 @@
   },
   "routes": {
     "app": "",
+    "library": "library",
     "index_json": "library/index.json",
     "json_api": "/json",
     "folders": "/folders",

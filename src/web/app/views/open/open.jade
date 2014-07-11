@@ -1,5 +1,11 @@
-div.export-view(k-open='')
+div.open-view(k-open='')
   .larger Open Project
-  div.p20.clearfix
+  .clearfix.open-view-lists
+    .folder-list(ng-if='folders')
+      select.p5(ng-options='folders.indexOf(item) as item for item in folders', ng-model='folder', size='10')
+    .file-list(ng-if='files')
+      select.p5(ng-options='files.indexOf(item) as item for item in files', ng-model='file', size='10')
+
+  .open-view-buttons.p20.clearfix
     button.btn.btn-default.pull-left Cancel
     button.btn.btn-primary.pull-right(ng-click="open()") Open Project

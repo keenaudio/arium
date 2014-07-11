@@ -10,7 +10,9 @@ var DEV = (process.env.NODE_ENV === "development");
 //@end
 
 //@if LOG
-var _f = function(msg) { return "app/route.js: " + msg; };
+var _f = function(msg) {
+  return "app/route.js: " + msg;
+};
 //@end
 
 module.exports = function(config) {
@@ -44,10 +46,13 @@ module.exports = function(config) {
 
   //@if DEV
   if (DEV) {
-    app.use(express.static(path.join(paths.tmp, 'web/app'), { hidden: true }));
+    app.use(express.static(path.join(paths.tmp, 'web/app'), {
+      hidden: true
+    }));
   }
   //@end
 
+  app.use('/library', express.static(paths.library));
 
   app.use(express.static('web/app'));
 
