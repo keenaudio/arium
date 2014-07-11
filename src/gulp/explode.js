@@ -20,13 +20,13 @@ module.exports = function($) {
       function createTargetFolder(cb) {
         var targetFile = $.util.template($.config.getRaw("explode.output"), $.merge(fileProps, { tracknum: 1 }));
         var targetDir = path.resolve(path.dirname(targetFile),'..');
-        var folder = fileProps.folder;
-        $.util.log("Creating folder " + folder + " in targetDir " + targetDir);
+        var folder = path.dirname(path.resolve(targetFile)); //fileProps.folder;
+        $.util.log("Creating folder " + folder); // + " in targetDir " + targetDir);
 
         $.exec([
           'mkdir -p "' + folder + '"'
         ], {
-          cwd: targetDir
+          //cwd: targetDir
         }, cb);
       };
 

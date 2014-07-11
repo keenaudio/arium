@@ -3,6 +3,7 @@ bower_components
 inbox
 library
 outbox
+working
 .tmp
 dist
 *.mogg

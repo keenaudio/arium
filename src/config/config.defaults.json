@@ -3,22 +3,35 @@
     "livereload": 35729,
     "server": 8008
   },
+  "routes": {
+    "app": "",
+    "index_json": "library/index.json",
+    "json_api": "/json",
+    "folders": "/folders",
+    "als": "/als",
+    "daw": "/daw",
+    "static": "/static",
+    "lib": "/lib"
+  },
   "paths": {
     "library": "./library",
     "inbox": "./inbox",
     "outbox": "./outbox",
-    "folders": "<%= config.get('paths.library') %>/folders",
-    "meta": "<%= config.get('paths.library') %>/meta",
-    "moggs": "<%= config.get('paths.library') %>/mogg",
-    "mwavs": "<%= config.get('paths.library') %>/wav",
-    "posted": "<%= config.get('paths.library') %>/posted",
+    "working": "./working",
+    "folders": "<%= config.get('paths.library') %>",
+    "meta": "<%= config.get('paths.working') %>/meta",
+    "moggs": "<%= config.get('paths.working') %>/mogg",
+    "mwavs": "<%= config.get('paths.working') %>/wav",
+    "posted": "<%= config.get('paths.working') %>/posted",
     "secretsJSON": "secrets.json",
-    "als": "<%= config.get('paths.library') %>/als",
+    "als": "<%= config.get('paths.library') %>",
     "templates": "./templates"
   },
   "create_dirs": [
     "<%= config.get('paths.library') %>",
     "<%= config.get('paths.inbox') %>",
+    "<%= config.get('paths.outbox') %>",
+    "<%= config.get('paths.working') %>",
     "<%= config.get('paths.folders') %>",
     "<%= config.get('paths.meta') %>",
     "<%= config.get('paths.moggs') %>",
@@ -43,7 +56,7 @@
   },
   "explode": {
     "input": "<%= config.get('paths.mwavs') %>/**/*.wav",
-    "output": "<%= config.get('paths.folders') %>/<%= folder %>/<%= $.pad(tracknum,2) %>.<%= folder %>.wav"
+    "output": "<%= config.get('paths.folders') %>/<%= folder %>/Samples/Imported/<%= $.pad(tracknum,2) %>.<%= folder %>.wav"
   },
   "als2json": {
     "input": "<%= config.get('paths.als') %>/**/*.als",

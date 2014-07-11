@@ -12,6 +12,7 @@ $.merge($, {
   _: _,
   assert: require('assert'),
   gulp: gulp,
+  glob: glob,
   args: args,
   path: path,
   through: require('through'),

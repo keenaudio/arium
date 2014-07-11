@@ -5,7 +5,161 @@ var gulp = require('gulp');
 var fs = require('fs');
 var path = require('path');
 var $ = require('./gulp'); // Gulp helper object
+var api = require('./server/api')($.config);
+var Project = require('./lib/formats/project');
 
+$.createProjectFile = function(options) {
+  $.assert(options, "Options are required");
+  var outPath = path.resolve(path.join(options.folder, "project.json"));
+  var folder = path.basename(options.folder);
+
+  var files = $.glob.sync("**/*.wav", { 
+      cwd: path.dirname(outPath)
+    });
+
+  $.util.log("files: ", JSON.stringify(files, null, 2));
+
+  var tracks = files.map(function(file) {
+    return {
+      name: path.basename(file, path.extname(file))
+    };
+  });
+
+
+  var samples = files.map(function(file) {
+    return {
+      fileName: file
+    };
+  });
+
+    
+  var project = new Project(folder, "files")
+  tracks.forEach(function(track) {
+    project.addTrack(new Project.Track(track.name, "file"))
+  });
+
+  var set = new Project.Set(folder, "files")
+  samples.forEach(function(sample, index) {
+    set.addSample(sample, index);
+  });
+
+  project.addSet(set);
+
+
+  //var project = Project.fromFiles(folder, wavs);
+
+  $.util.log("Project: ", project);
+
+  fs.writeFileSync(outPath, JSON.stringify(project, null, 2));
+};
+
+
+gulp.task('library', function(cb) {
+  $.sequence(
+    'ingest',
+    'als2json',
+ //   'als2daw',
+    'oggdec',
+     'meta',
+    'explode',
+    'create-projects',
+    'index',
+    cb);
+
+});
+
+gulp.task('create-projects', function(cb) {
+  api.folders(function(error, folders) {
+    folders.forEach(function(folder, i) {
+      var outPath = path.join($.config.get('paths.library'), folder);
+      $.createProjectFile({
+        folder: outPath
+      });
+    });
+    cb();
+  });
+});
+
+// Index
+gulp.task('index', function(cb) {
+  api.folders(function(error, folders) {
+    var content = JSON.stringify({
+      folders: folders
+    }, null, 2);
+    var outPath = path.join($.config.get('paths.library'), 'index.json');
+    fs.writeFile(outPath, content, function() {
+
+      folders.forEach(function(folder, i) {
+        $.util.log("Index: " + folder);
+        outPath = path.join($.config.get('paths.library'), folder);
+        var files = $.glob.sync("*.json", { cwd: outPath });
+        files = files.filter(function(file) {
+          return file !== 'index.json';
+        });
+        $.util.log("Files: ", files);
+        outPath = path.join(outPath, 'index.json');
+        content = JSON.stringify({
+          files: files
+        }, null, 2);
+        fs.writeFileSync(outPath, content);
+      });
+
+      cb();
+
+    });
+  });
+});
+
+// Ingest
+gulp.task('ingest', function() {
+  var moggFilter = $.filter("**/*.mogg");
+  var alsFilter = $.filter("**/*.als");
+  return gulp.src($.config.get("ingest.input"), { buffer: false })
+    .pipe(moggFilter)
+    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("ingest.output.mogg"))) // only process new/changed files
+    .pipe($.ingest($.config.getRaw("ingest.output.mogg")))
+    .pipe(moggFilter.restore())
+    .pipe(alsFilter)
+    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("ingest.output.als"))) // only process new/changed files
+    .pipe($.ingest($.config.getRaw("ingest.output.als"), { folder: true }))
+    .pipe(alsFilter.restore())
+    //    .pipe(gulp.dest($.config.ingest.output))
+});
+
+
+// OGG Decode
+gulp.task('oggdec', function() {
+  return gulp.src($.config.get("oggdec.input"), { buffer: false })
+    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("oggdec.output"))) // only process new/changed files
+    .pipe($.oggdec())
+});
+
+// Extract meta
+gulp.task('meta', function() {
+  return gulp.src($.config.get("meta.input"), { buffer: false })
+    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("meta.output"))) // only process new/changed files
+    .pipe($.meta())
+});
+
+// Explode one multichannel to many mono files
+gulp.task('explode', function() {
+  return gulp.src($.config.get("explode.input"), { buffer: false })
+    //.pipe($.debug({ verbose: true }))
+    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("explode.output"), { tracknum: 1 })) // only process new/changed files
+    .pipe($.explode());
+});
+
+gulp.task('als2json', function() {
+  return gulp.src($.config.get("als2json.input"), { buffer: false })
+    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("als2json.output"))) // only process new/changed files
+    .pipe($.als2json($.config.getRaw("als2json.output")));
+});
+
+gulp.task('als2daw', function() {
+  return gulp.src($.config.get("als2daw.input"), { buffer: false })
+    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("als2daw.output"))) // only process new/changed files
+    .pipe($.als2daw($.config.getRaw("als2daw.output")));
+});
 
 gulp.task('test3', function() {
 
@@ -188,68 +342,4 @@ gulp.task('test1', function() {
     .pipe(gulp.dest($.config.get('paths.outbox')));
 
 });
-
-gulp.task('library', function(cb) {
-  $.sequence(
-    'ingest',
-    'als2json',
- //   'als2daw',
-    'oggdec',
-     'meta',
-    'explode',
-    cb);
-
-});
-
-// Ingest
-gulp.task('ingest', function() {
-  var moggFilter = $.filter("**/*.mogg");
-  var alsFilter = $.filter("**/*.als");
-  return gulp.src($.config.get("ingest.input"), { buffer: false })
-    .pipe(moggFilter)
-    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("ingest.output.mogg"))) // only process new/changed files
-    .pipe($.ingest($.config.getRaw("ingest.output.mogg")))
-    .pipe(moggFilter.restore())
-    .pipe(alsFilter)
-    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("ingest.output.als"))) // only process new/changed files
-    .pipe($.ingest($.config.getRaw("ingest.output.als"), { folder: true }))
-    .pipe(alsFilter.restore())
-    //    .pipe(gulp.dest($.config.ingest.output))
-});
-
-
-// OGG Decode
-gulp.task('oggdec', function() {
-  return gulp.src($.config.get("oggdec.input"), { buffer: false })
-    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("oggdec.output"))) // only process new/changed files
-    .pipe($.oggdec())
-});
-
-// Extract meta
-gulp.task('meta', function() {
-  return gulp.src($.config.get("meta.input"), { buffer: false })
-    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("meta.output"))) // only process new/changed files
-    .pipe($.meta())
-});
-
-// Explode one multichannel to many mono files
-gulp.task('explode', function() {
-  return gulp.src($.config.get("explode.input"), { buffer: false })
-    //.pipe($.debug({ verbose: true }))
-    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("explode.output"), { tracknum: 1 })) // only process new/changed files
-    .pipe($.explode());
-});
-
-gulp.task('als2json', function() {
-  return gulp.src($.config.get("als2json.input"), { buffer: false })
-    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("als2json.output"))) // only process new/changed files
-    .pipe($.als2json($.config.getRaw("als2json.output")));
-});
-
-gulp.task('als2daw', function() {
-  return gulp.src($.config.get("als2daw.input"), { buffer: false })
-    .pipe($.args.force ? $.through() : $.hasChanged($.config.getRaw("als2daw.output"))) // only process new/changed files
-    .pipe($.als2daw($.config.getRaw("als2daw.output")));
-});
-
 

@@ -20,9 +20,13 @@ module.exports = function(config) {
     },
 		folders: function(cb) {
 			fs.readdir(config.get('paths.folders'), function(err, files) {
-				cb(err, files);
+				cb(err, files.filter(function(file) {
+          return (file !== 'index.json');
+        }));
 			});
 		},
+
+    
     files: function(folder, cb) {
       var folder = path.join(config.get('paths.folders'), folder);
       glob("*.wav", { cwd: folder }, function(err, files) {
