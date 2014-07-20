@@ -3,6 +3,9 @@ var cp = require('child_process');
 module.exports = function($) {
   var path = $.path;
   return function shellOutput(cmd, args, cb) {
+
+    $.util.log("Running program: " + cmd + " args: " + JSON.stringify(args));
+
     // spawn program
     var program = cp.spawn(cmd, args);
 
@@ -10,7 +13,7 @@ module.exports = function($) {
     var newBuffer = new Buffer(0);
 
     // when program receives data add it to buffer
-    program.stdout.on("readable", function () {
+    program.stdout.on("readable", function() {
       var chunk;
       while (chunk = program.stdout.read()) {
         newBuffer = Buffer.concat([
@@ -21,7 +24,7 @@ module.exports = function($) {
     });
 
     // when program finishes call callback
-    program.stdout.on("end", function () {
+    program.stdout.on("end", function() {
       cb(newBuffer);
     });
   };

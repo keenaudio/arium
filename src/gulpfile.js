@@ -67,20 +67,21 @@ gulp.task('nfo', function() {
       cwd: $.args.dir,
       read: false
     })
+    //.pipe($.debug())
+    .pipe($.nfo())
     .pipe($.debug())
-    .pipe(spawn({
-      cmd: "ffprobe",
-      args: [
-        "-v quiet",
-        "-print_format json",
-        "-show_format",
-        "-i "
-      ],
-      // optional
-      filename: function(base, ext) {
-        return base + "-half" + ext;
-      }
+    .pipe($.json2xml({
+      rootName: 'musicvideo'
     }))
+    .pipe($.rename({
+      extname: '.nfo'
+    }))
+    .pipe($.debug({
+      verbose: true
+    }))
+    .pipe(gulp.dest($.args.dir));
+
+
 });
 
 gulp.task('library', function(cb) {
