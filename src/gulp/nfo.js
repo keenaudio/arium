@@ -29,7 +29,8 @@ module.exports = function($) {
       $.util.log("Artist: " + tags.artist + " title: " + tags.title);
       var nfo = {
         title: tags.title,
-        artist: tags.artist
+        artist: tags.artist,
+        album: tags.artist
       };
 
       file.contents = new Buffer(JSON.stringify(nfo));
