@@ -13,6 +13,7 @@
     "node.extend": "^1.0.10",
     "socket.io": "^1.0.5",
     "underscore": "^1.6.0",
+    "xbmc": "^0.3.3",
     "yargs": "1.2.1"
   },
   "devDependencies": {

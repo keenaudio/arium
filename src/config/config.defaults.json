@@ -66,5 +66,10 @@
   "als2daw": {
     "input": "<%= config.get('paths.als') %>/**/*.als.json",
     "output": "<%= config.get('paths.als') %>/<%= folder %>/<%= folder %>.daw.json"
+  },
+  "xbmc": {
+    "host": "::1",
+    "port": 9090,
+    "verbose": true
   }
 }

@@ -375,7 +375,7 @@ gulp.task('dev-server', function(cb) {
   var env = $.merge(process.env, {
     NODE_ENV: 'development',
     //  NODE_DEBUG: "livereload,express:*",
-    // DEBUG: "tinylr:*,send"
+    DEBUG: "tinylr:*,send,xbmc:*"
   });
 
   $.util.log("Server env: " + JSON.stringify(env, null, 2));
