@@ -17,6 +17,7 @@
     "yargs": "1.2.1"
   },
   "devDependencies": {
+    "browserify": "^5.9.1",
     "connect-livereload": "git://github.com/gadr/connect-livereload.git",
     "gulp": "3.8.1",
     "gulp-changed": "^0.4.0",
@@ -53,6 +54,8 @@
     "through": "2.3.4",
     "through2": "0.4.1",
     "touch": "0.0.3",
+    "vinyl-source-stream": "^0.1.1",
+    "watchify": "^1.0.1",
     "xml2js": "^0.4.4"
   },
   "engines": {

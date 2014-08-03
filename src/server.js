@@ -171,8 +171,8 @@ app.use(config.get('routes.json_api'), require('./server/json_api')(config, api)
 // Web 
 app.use('/', require('./web/route')(config, api));
 
-var xbmcClient = require('./server/xbmc_client')(config);
-return;
+//var xbmcClient = require('./server/xbmc_client')(config);
+//return;
 
 // Service start
 var server = http.createServer(app);
