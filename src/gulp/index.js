@@ -3,7 +3,7 @@ var path = require('path');
 var glob = require('glob');
 var _ = require('underscore');
 var fs = require('fs');
-var args = require('yargs').argv;// Command line args
+var args = require('yargs').argv; // Command line args
 
 // Core helpers
 var $ = require('gulp-load-plugins')(); // Load gulp plugins (lazy)
@@ -25,15 +25,18 @@ console.log("$: " + JSON.stringify($));
 
 // Simple helper methods
 $.pad = function(num, size) {
-  var s = num+"";
+  var s = num + "";
   while (s.length < size) s = "0" + s;
   return s;
 }
 
 $.mkdirs = function(dirs) {
-  var cmds = [], dir;
+  var cmds = [],
+    dir;
   for (var i = 0; i < dirs.length; i++) {
-    dir = _.template(dirs[i], { config: $.config });
+    dir = _.template(dirs[i], {
+      config: $.config
+    });
     cmds.push('mkdir -p "' + dir + '"');
     $.util.log("Creating directory: " + dir);
   }
@@ -45,17 +48,17 @@ $.mkdirs = function(dirs) {
 // Build if source is newer or if target does not exist
 $.needBuild = function(stream, cb, sourceFile, targetPath) {
 
-  fs.stat(targetPath, function (err, targetStat) {
-      if (err && err.code === 'ENOENT') {
-        $.util.log("Processing NEW source: " + sourceFile.relative);
-        stream.push(sourceFile);
-      } else if (sourceFile.stat.mtime > targetStat.mtime) {
-        $.util.log("Processing NEWER source: " + sourceFile.relative);
-        stream.push(sourceFile);
-      } else {
-        //$.util.log("NO change needed: " + sourceFile.relative);
-      }
-      cb();
+  fs.stat(targetPath, function(err, targetStat) {
+    if (err && err.code === 'ENOENT') {
+      $.util.log("Processing NEW source: " + sourceFile.relative);
+      stream.push(sourceFile);
+    } else if (sourceFile.stat.mtime > targetStat.mtime) {
+      $.util.log("Processing NEWER source: " + sourceFile.relative);
+      stream.push(sourceFile);
+    } else {
+      //$.util.log("NO change needed: " + sourceFile.relative);
+    }
+    cb();
   });
 
 }
@@ -78,16 +81,19 @@ function camelize(str) {
   });
 };
 
-glob(globPattern, { cwd: __dirname, sync: true }, function(err, files) {
+glob(globPattern, {
+  cwd: __dirname,
+  sync: true
+}, function(err, files) {
   _.each(files, function(file) {
     console.log("Requiring file: " + file);
     var name = file.replace('.js', '');
     var moduleExports = require('./' + file)($);
     var n = camelize(path.basename(name));
-   // console.log("Loading gulp helper: " + n);
+    console.log("Loading gulp helper: " + n);
     //for (var n in moduleExports) {
-      if (helpers[n]) console.error("ERROR processing file '" + file + "'.  Object '" + n + "' has already been added to exports list"); //@strip
-      helpers[n] = moduleExports;
+    if (helpers[n]) console.error("ERROR processing file '" + file + "'.  Object '" + n + "' has already been added to exports list"); //@strip
+    helpers[n] = moduleExports;
   });
 });
 
@@ -96,6 +102,3 @@ console.log("Gulp helpers: " + Object.keys(helpers));
 $.merge($, helpers); // Load gulp helpers
 
 module.exports = $;
-
-
-

@@ -23,18 +23,23 @@ module.exports = function($) {
     return $.gulp.src(config.src, srcOptions)
       .pipe(jadeFilter)
       .pipe($.jsmacro($.options.jsmacro.client)) // unlike html, jade will be processed with jsmacro
-      .pipe($.jade({ pretty: true, locals: jadeVars }))
+      .pipe($.jade({
+        pretty: true,
+        locals: jadeVars
+      }))
       //.pipe($.debug({ verbose: true }))
       .pipe(jadeFilter.restore())
       .pipe($.ngHtml2js({
-          moduleName: config.module//,
-          // replace: function(filename) {
-          //   return filename.replace('.jade', '.html');
-          // }
+        moduleName: config.module //,
+        // replace: function(filename) {
+        //   return filename.replace('.jade', '.html');
+        // }
         //  stripPrefix: config.cwd
       }))
-     // .pipe($.concat(config.module + '.js'))
+      // .pipe($.concat(config.module + '.js'))
       .pipe($.gulp.dest(config.dest))
-      .pipe($.size({ showFiles: true }));
+      .pipe($.size({
+        showFiles: true
+      }));
   }
 }

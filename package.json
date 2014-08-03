@@ -2,6 +2,17 @@
   "name": "arium",
   "version": "0.0.1",
   "repository": {},
+  "browser2": {
+    "jquery": "./bower_components/jquery/dist/jquery.js"
+  },
+  "browserify": {
+    "transform": ["browserify-shim", "coffeeify", "brfs"]
+  },
+  "browserify-shim": {
+    "assert": "global:assert",
+    "jquery": "global:jQuery"
+  },
+
   "dependencies": {
     "amdefine": "^0.1.0",
     "body-parser": "1.0.2",
@@ -17,7 +28,10 @@
     "yargs": "1.2.1"
   },
   "devDependencies": {
+    "brfs": "^1.2.0",
     "browserify": "^5.9.1",
+    "browserify-shim": "git://github.com/thlorenz/browserify-shim.git#browserify-5.8",
+    "coffeeify": "^0.7.0",
     "connect-livereload": "git://github.com/gadr/connect-livereload.git",
     "gulp": "3.8.1",
     "gulp-changed": "^0.4.0",
@@ -38,6 +52,7 @@
     "gulp-load-plugins": "0.5.0",
     "gulp-ng-html2js": "^0.1.7",
     "gulp-ngmin": "^0.3.0",
+    "gulp-notify": "^1.4.1",
     "gulp-rename": "1.2.0",
     "gulp-replace": "^0.3.0",
     "gulp-requirejs": "^0.1.3",
@@ -48,6 +63,7 @@
     "gulp-useref": "^0.5.0",
     "gulp-util": "2.2.14",
     "gulp-watch": "0.6.2",
+    "pretty-hrtime": "^0.2.1",
     "requirejs": "^2.1.14",
     "run-sequence": "0.3.6",
     "streamqueue": "0.0.6",

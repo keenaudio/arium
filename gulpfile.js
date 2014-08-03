@@ -3,14 +3,47 @@
 var _ = require('underscore');
 var gulp = require('gulp');
 var path = require('path');
+var browserify = require('browserify');
+var watchify = require('watchify');
+var source = require('vinyl-source-stream');
 
 var $ = require('./src/gulp'); // Gulp helper object
 
-// Build helpers
-$.jsmacro = require('./tools/gulp/jsmacro');
-$.html2js = require('./tools/gulp/html2js');
-
 // Tasks
+
+gulp.task('watch', function(cb) {
+
+
+  gulp.watch('src/{lib,server,web}/**/*.coffee', {
+    mode: 'poll'
+  }, ['coffee']);
+  gulp.watch("src/web/app/**/*.jade", {
+    mode: 'poll'
+  }, ["app-templates"]); // recompile jade templates to JS on file save
+  gulp.watch("src/web/daw/**/*.jade", {
+    mode: 'poll'
+  }, ["daw-templates"]);
+  gulp.watch('src/web/**/*.less', {
+    mode: 'poll'
+  }, ['less']);
+
+  var lr = livereload();
+  gulp.watch([
+    "{.tmp,src}/{web,lib,static}/**/*",
+    "!**/*.{jade,coffee,less}"
+  ], {
+    // glob: , 
+    // emitOnGlob: false, 
+    // emit: "all",
+    // mode: 'poll'
+  }, function(event) {
+    $.util.log('WATCH CHANGE: ' + event.type + ' ' + event.path);
+    lr.changed(event.path);
+  });
+
+  //.pipe(lr);
+});
+
 
 gulp.task('clean', function() {
   return gulp.src([
@@ -61,6 +94,17 @@ gulp.task('copy-web-dist', function() {
 
 gulp.task('require-js', function(cb) {
   $.exec(['node_modules/requirejs/bin/r.js -o .tmp/web/build.js'], {}, cb);
+});
+
+gulp.task('build-lib', function() {
+  console.log('building lib..' + $);
+  return $.browserify({
+    src: './src/lib',
+    dest: './dist/lib',
+    fileName: 'lib.js',
+    externals: ['jquery', 'assert']
+  });
+
 });
 
 gulp.task('build-html-tmp', function() {
@@ -334,37 +378,6 @@ function livereload() {
 }
 
 
-gulp.task('watch', function(cb) {
-
-  gulp.watch('src/{lib,server,web}/**/*.coffee', {
-    mode: 'poll'
-  }, ['coffee']);
-  gulp.watch("src/web/app/**/*.jade", {
-    mode: 'poll'
-  }, ["app-templates"]); // recompile jade templates to JS on file save
-  gulp.watch("src/web/daw/**/*.jade", {
-    mode: 'poll'
-  }, ["daw-templates"]);
-  gulp.watch('src/web/**/*.less', {
-    mode: 'poll'
-  }, ['less']);
-
-  var lr = livereload();
-  gulp.watch([
-    "{.tmp,src}/{web,lib,static}/**/*",
-    "!**/*.{jade,coffee,less}"
-  ], {
-    // glob: , 
-    // emitOnGlob: false, 
-    // emit: "all",
-    // mode: 'poll'
-  }, function(event) {
-    $.util.log('WATCH CHANGE: ' + event.type + ' ' + event.path);
-    lr.changed(event.path);
-  });
-
-  //.pipe(lr);
-});
 
 
 gulp.task('dev-server', function(cb) {

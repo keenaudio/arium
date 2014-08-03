@@ -1,13 +1,13 @@
 'use strict';
 
-var MacroEngine = require('../lib/jsmacro');
+var MacroEngine = require('jsmacro'); // src/node_modules
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
 var through = require('through');
 
-module.exports = function(options) {
+var streamFunc = function(options) {
 
-  if (!options || typeof options !== 'object') throw new PluginError('jsmacro',  'Need options for jsmacro');
+  if (!options || typeof options !== 'object') throw new PluginError('jsmacro', 'Need options for jsmacro');
 
   var macro = new MacroEngine(options);
   if (options.define) {
@@ -20,7 +20,7 @@ module.exports = function(options) {
   return through(function(file) {
     var post = macro.parse(file.contents.toString());
     if (post.length < 1) {
-      throw new PluginError('jsmacro',  'File was empty: ' + file.path);
+      throw new PluginError('jsmacro', 'File was empty: ' + file.path);
     } else {
       gutil.log("JSMacro: " + file.path);
       file.contents = new Buffer(post);
@@ -28,4 +28,8 @@ module.exports = function(options) {
     }
   });
 
+}
+
+module.exports = function($) {
+  return streamFunc;
 }
