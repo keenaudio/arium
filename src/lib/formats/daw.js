@@ -1,6 +1,4 @@
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
-
-define(['underscore', 'assert'], function(_, assert) {
+var assert = require('assert');
 
 var DawProject = function(data) {
   if (typeof data === 'undefined') { // default project settings
@@ -47,4 +45,4 @@ DawProject.prototype.addSample = function(url, duration, trackNum, startTime) {
   return newId;
 }
 
-});
+module.exports = DawProject;

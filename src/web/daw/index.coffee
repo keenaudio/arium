@@ -1,4 +1,6 @@
+
 assert = require "assert"
+Audio = require "lib/audio"
 
 #@if LOG
 _ls = "Daw.daw"
@@ -12,7 +14,6 @@ locals = {}
 app = angular.module("daw", [ # Module dependencies
   "ui.slider"
   "config"
-  "daw-templates"
 ])
 
 # configure html5 to get links working on jsfiddle
@@ -20,11 +21,11 @@ app = angular.module("daw", [ # Module dependencies
 app.service "daw", () ->
 
   svc =
-    mixer: audio.createMixer()
-    scheduler: audio.createScheduler()
+    mixer: Audio.createMixer()
+    scheduler: Audio.createScheduler()
 
     audioContext: ->
-      audio.context()
+      Audio.context()
 
     loadAudio: (url, progressCallback, doneCallback) ->
       my = this
@@ -72,8 +73,8 @@ app.service "daw", () ->
         _.each project.sets, (set) ->
           sampleData = set.getSample(track.id)
           if sampleData
-            sample = audio.createSample(sampleData)
-            clip = new audio.Clip(sample, track)
+            sample = Audio.createSample(sampleData)
+            clip = new Audio.Clip(sample, track)
             track.addClip(clip, set.id)
         return
 
@@ -138,7 +139,5 @@ app.run ->
   console.log _f("daw app running") #@strip
   return
 
-
-
-
-
+require "./components"
+require "./views/project/project"

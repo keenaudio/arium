@@ -1,20 +1,14 @@
-define [
-  "daw/module"
-  "angular"
-  "ng"
-  "audio"
-], (module, angular, NG, audio) ->
-  angular.module(module["name"]).directive "dawPlayClip", ($http, $routeParams) ->
-    restrict: "A"
-    scope:
-      clip: "="
+angular.module("daw").directive "dawPlayClip", ($http, $routeParams) ->
+  restrict: "A"
+  scope:
+    clip: "="
 
-    templateUrl: "components/play_clip/play_clip.jade"
-    link: ($scope, $elem, attr) ->
-      NG.attachScopeToElem $scope, $elem
-      return
+  templateUrl: "components/play_clip/play_clip.jade"
+  link: ($scope, $elem, attr) ->
+    NG.attachScopeToElem $scope, $elem
+    return
 
-  return
+
 
 
 # function loadAudio() {

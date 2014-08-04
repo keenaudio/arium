@@ -1,11 +1,13 @@
-define(['angular', 'lib/common/config'], function(angular, Config) {
+var Config = require("config");
 
 //@if LOG
 var _ls = "ng.config";
 //var console = Logger.get(_ls);
-var _f = function(msg) { return "[" + _ls + "] " + msg; }
-//@end
-  
+var _f = function(msg) {
+    return "[" + _ls + "] " + msg;
+  }
+  //@end
+
 var mod = angular.module('config', [ // module dependencies
 ]);
 
@@ -32,7 +34,7 @@ mod.init = function(configData) {
 
   if (instance.get("loadJSON", false) === true) {
     var $http = initInjector.get('$http');
-    var req = $http.get('/config.json').then(function (response) {
+    var req = $http.get('/config.json').then(function(response) {
       mod.constant('CONFIG_JSON', response.data);
     })["catch"](function() {
       mod.constant('CONFIG_JSON', {});
@@ -63,6 +65,3 @@ mod.init = function(configData) {
   return promise;
 
 }
-
-
-});

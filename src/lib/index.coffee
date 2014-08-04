@@ -1,4 +1,4 @@
-console.log "index.coffee fo sho"
-
 module.exports =
-  audio: require "./audio"
+  Audio: require "./audio"
+  Formats: require "./formats"
+  NG: require "./ng"

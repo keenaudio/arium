@@ -7,6 +7,10 @@ block head
   link(rel="stylesheet", type="text/css", href="app/styles/app.css")
   <!-- endbuild -->
 
+  script(type="text/javascript", src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js")
+  script(type="text/javascript", src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js")
+  script(type="text/javascript", src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.js")
+  script(type="text/javascript", src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular-route.js")
 
   //script(type="text/javascript", src="/bower_components/jquery-ui/ui/jquery-ui.js")
   script(type='text/javascript').
@@ -29,7 +33,10 @@ block content
   #app
     div.h100p(ng-view="")
 
-  script(type='text/javascript', data-main='index.js', src='#{ requireJS }')
+  //script(type='text/javascript', data-main='index.js', src='#{ requireJS }')
+  // script(type='text/javascript', src='lib.js')
+  // script(type='text/javascript', src='daw.js')
+  script(type='text/javascript', src='app.js')
 
 
 

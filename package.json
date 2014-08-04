@@ -2,17 +2,25 @@
   "name": "arium",
   "version": "0.0.1",
   "repository": {},
-  "browser2": {
-    "jquery": "./bower_components/jquery/dist/jquery.js"
+  "browser": {
+    "lib": "./src/lib/index.coffee",
+    "lib/audio": "./src/lib/audio/index.coffee",
+    "lib/ng": "./src/lib/ng/index.coffee",
+    "daw": "./src/web/daw/index.coffee",
+    "assert": "./src/lib/common/assert.js",
+    "jquery": false,
+    "angular-ui-slider": "./bower_components/angular-ui-slider/src/slider.js"
   },
   "browserify": {
-    "transform": ["browserify-shim", "coffeeify", "brfs"]
+    "transform": [
+      "browserify-shim",
+      "coffeeify",
+      "browserify-plain-jade"
+    ]
   },
   "browserify-shim": {
-    "assert": "global:assert",
-    "jquery": "global:jQuery"
+    "jquery": "global:$"
   },
-
   "dependencies": {
     "amdefine": "^0.1.0",
     "body-parser": "1.0.2",
@@ -30,6 +38,7 @@
   "devDependencies": {
     "brfs": "^1.2.0",
     "browserify": "^5.9.1",
+    "browserify-plain-jade": "^0.2.0",
     "browserify-shim": "git://github.com/thlorenz/browserify-shim.git#browserify-5.8",
     "coffeeify": "^0.7.0",
     "connect-livereload": "git://github.com/gadr/connect-livereload.git",
@@ -63,6 +72,7 @@
     "gulp-useref": "^0.5.0",
     "gulp-util": "2.2.14",
     "gulp-watch": "0.6.2",
+    "jadeify": "^2.5.0",
     "pretty-hrtime": "^0.2.1",
     "requirejs": "^2.1.14",
     "run-sequence": "0.3.6",

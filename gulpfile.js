@@ -10,9 +10,77 @@ var source = require('vinyl-source-stream');
 var $ = require('./src/gulp'); // Gulp helper object
 
 // Tasks
+gulp.task('build-lib', function() {
+  console.log('browserify lib..' + $);
+  return $.browserify({
+    src: './src/lib',
+    dest: './dist',
+    fileName: 'lib.js',
+    externals: ['jquery', 'assert'],
+    standalone: 'Lib'
+  });
+});
 
-gulp.task('watch', function(cb) {
+gulp.task('watch-lib', function() {
+  console.log('watchify lib' + $);
+  return $.browserify({
+    watch: true,
+    src: './src/lib',
+    dest: './.tmp/web',
+    fileName: 'lib.js',
+    //   externals: ['jquery'],
+    standalone: 'Lib'
+  });
+});
 
+gulp.task('build-daw', function() {
+  console.log('browserify daw..' + $);
+  return $.browserify({
+    src: './src/web/daw',
+    dest: './dist',
+    fileName: 'daw.js',
+    standalone: 'Daw'
+  });
+});
+
+
+gulp.task('watch-daw', function() {
+  console.log('watchify daw..' + $);
+  return $.browserify({
+    watch: true,
+    src: './src/web/daw',
+    dest: './.tmp/web',
+    fileName: 'daw.js',
+    standalone: 'Daw'
+  });
+});
+
+
+gulp.task('build-app', function() {
+  console.log('browserify app..' + $);
+  return $.browserify({
+    src: './src/web/app',
+    dest: './dist',
+    fileName: 'app.js',
+    standalone: 'App'
+  });
+});
+
+
+gulp.task('watch-app', function() {
+  console.log('watchify daw..' + $);
+  return $.browserify({
+    watch: true,
+    src: './src/web/app',
+    dest: './.tmp/web',
+    fileName: 'app.js',
+    standalone: 'App'
+  });
+});
+
+
+gulp.task('watch', ['watch-app'], function(cb) {
+  return;
 
   gulp.watch('src/{lib,server,web}/**/*.coffee', {
     mode: 'poll'
@@ -96,16 +164,6 @@ gulp.task('require-js', function(cb) {
   $.exec(['node_modules/requirejs/bin/r.js -o .tmp/web/build.js'], {}, cb);
 });
 
-gulp.task('build-lib', function() {
-  console.log('building lib..' + $);
-  return $.browserify({
-    src: './src/lib',
-    dest: './dist/lib',
-    fileName: 'lib.js',
-    externals: ['jquery', 'assert']
-  });
-
-});
 
 gulp.task('build-html-tmp', function() {
 
