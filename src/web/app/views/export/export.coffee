@@ -1,3 +1,5 @@
+NG = require "lib/ng"
+
 angular.module("app").directive "kExport", ($http, config, daw) ->
   restrict: "A"
   link: ($scope, $elem, attr) ->

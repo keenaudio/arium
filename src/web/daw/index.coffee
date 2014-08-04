@@ -68,9 +68,9 @@ app.service "daw", () ->
       svc.project = project
       svc.clearAudio()
       mixer = svc.mixer
-      _.each project.tracks, (trackData) ->
+      project.tracks.forEach (trackData) ->
         track = mixer.createTrack()
-        _.each project.sets, (set) ->
+        project.sets.forEach (set) ->
           sampleData = set.getSample(track.id)
           if sampleData
             sample = Audio.createSample(sampleData)
@@ -84,7 +84,7 @@ app.service "daw", () ->
       project = svc.project
       scheduler = svc.scheduler
       mixer = svc.mixer
-      _.each mixer.tracks, (track) ->
+      mixer.tracks.forEach (track) ->
         clip = track.getClip(set.id)
         if clip
           #sample = audio.createSample(sampleData)

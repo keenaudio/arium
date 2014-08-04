@@ -8,14 +8,13 @@
     "lib/ng": "./src/lib/ng/index.coffee",
     "daw": "./src/web/daw/index.coffee",
     "assert": "./src/lib/common/assert.js",
-    "jquery": false,
     "angular-ui-slider": "./bower_components/angular-ui-slider/src/slider.js"
   },
   "browserify": {
     "transform": [
-      "browserify-shim",
       "coffeeify",
-      "browserify-plain-jade"
+      "browserify-plain-jade",
+      "browserify-shim"
     ]
   },
   "browserify-shim": {

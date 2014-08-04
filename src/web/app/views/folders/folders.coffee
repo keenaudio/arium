@@ -1,3 +1,4 @@
+NG = require "lib/ng"
 
 angular.module("app").directive "kFolders", ($http) ->
   restrict: "A"
@@ -55,7 +56,7 @@ angular.module("app").directive "kFolder", ($http, $routeParams, config, daw) ->
 # });
 angular.module("app").directive "kFile", ($routeParams, config) ->
   restrict: "A"
-  templateUrl: "views/folders/file.jade"
+  template: require "./file.jade"
   scope:
     file: "="
 

@@ -1,3 +1,5 @@
+NG = require "lib/ng"
+
 angular.module("app").directive "kOpen", ($http, $location, config, daw) ->
   restrict: "A"
   link: ($scope, $elem, attr) ->

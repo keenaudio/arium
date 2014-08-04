@@ -1,9 +1,11 @@
+NG = require "lib/ng"
+
 angular.module("daw").directive "dawPlayClip", ($http, $routeParams) ->
   restrict: "A"
   scope:
     clip: "="
 
-  templateUrl: "components/play_clip/play_clip.jade"
+  template: require "./play_clip.jade"
   link: ($scope, $elem, attr) ->
     NG.attachScopeToElem $scope, $elem
     return

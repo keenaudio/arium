@@ -1,6 +1,8 @@
-assert = require "assert"
-
 require "angular-ui-slider"
+
+
+assert = require "assert"
+NG = require "lib/ng"
 
 angular.module("daw").directive "dawFader", ($http, $routeParams) ->
   restrict: "A"
@@ -8,11 +10,11 @@ angular.module("daw").directive "dawFader", ($http, $routeParams) ->
     track: "="
     node: "="
 
-  templateUrl: "components/fader/fader.jade"
+  template: require "./fader.jade"
   link: ($scope, $elem, attr) ->
     NG.attachScopeToElem $scope, $elem
     
-    $scope.receiver = new Receiver($scope)
+    $scope.receiver = new NG.Receiver($scope)
 
     attachReceiver = (cur, prev) ->
       if prev and prev != cur

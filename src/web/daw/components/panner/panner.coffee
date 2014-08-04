@@ -1,11 +1,12 @@
 assert = require "assert"
+{NG,Audio} = require "lib"
 
 angular.module("daw").directive "dawPanner", ($http, $routeParams) ->
   restrict: "A"
   scope:
     panner: "="
 
-  templateUrl: "components/panner/panner.jade"
+  template: require "./panner.jade"
   link: ($scope, $elem, attr) ->
     NG.attachScopeToElem $scope, $elem
       
@@ -15,7 +16,7 @@ angular.module("daw").directive "dawPanner", ($http, $routeParams) ->
     #   console.log _f("setValue: %s, r: %s, l: %s"), value, rval, lval
     #   $scope.panner.setPosition lval, 0, rval
 
-    $scope.receiver = new Receiver($scope)
+    $scope.receiver = new NG.Receiver($scope)
 
     attachReceiver = (cur, prev) ->
       if prev and prev != cur

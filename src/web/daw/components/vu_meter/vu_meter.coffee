@@ -1,3 +1,5 @@
+NG = require "lib/ng"
+
 _f = (msg) ->
   "VUMeter: " + msg
 
@@ -11,7 +13,7 @@ angular.module("daw").directive "dawVuMeter", ($http, $routeParams) ->
     node: "="
     enabled: '='
     
-  templateUrl: "components/vu_meter/vu_meter.jade"
+  template: require "./vu_meter.jade"
   link: ($scope, $elem, attr) ->
     
     NG.attachScopeToElem $scope, $elem

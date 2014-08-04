@@ -1,3 +1,5 @@
+NG = require "lib/ng"
+
 angular.module("app").directive "kSortable", ($log) ->
   restrict: "A"
   link: (scope, element, attrs) ->

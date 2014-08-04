@@ -30,11 +30,10 @@ var mainFunc = function(options) {
     bundler = watchify(bundler)
   }
 
-  externals.forEach(function(lib) {
-    console.log("External: " + lib);
-    bundler.external(lib);
-  });
-
+  // externals.forEach(function(lib) {
+  //   console.log("External: " + lib);
+  //   bundler.external(lib);
+  // });
 
 
   if (options.transform) {

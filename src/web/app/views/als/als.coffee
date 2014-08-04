@@ -1,3 +1,4 @@
+NG = require "lib/ng"
 
 clip2sample = (clip, baseUrl) ->
   return  unless clip
@@ -68,7 +69,7 @@ angular.module("app").directive "kAlsProject", ($http, $routeParams, config, daw
 
 angular.module("app").directive "kAlsScene", ($routeParams, config) ->
   restrict: "A"
-  templateUrl: "views/als/als_scene.jade"
+  template: require "./als_scene.jade"
   scope:
     scene: "="
 
@@ -86,7 +87,7 @@ angular.module("app").directive "kAlsScene", ($routeParams, config) ->
 
 angular.module("app").directive "kAlsTrack", ->
   restrict: "A"
-  templateUrl: "views/als/als_track.jade"
+  template: require "./als_track.jade"
   scope:
     track: "="
     showHeader: "@"
@@ -105,7 +106,7 @@ angular.module("app").directive "kAlsTrack", ->
 
 angular.module("app").directive "kAlsClipSlot", ->
   restrict: "A"
-  templateUrl: "views/als/als_slot.jade"
+  template: require "./als_slot.jade"
   scope:
     slot: "="
 
@@ -120,7 +121,7 @@ angular.module("app").directive "kAlsClipSlot", ->
 
 angular.module("app").directive "kAlsClip", ->
   restrict: "A"
-  templateUrl: "views/als/als_clip.jade"
+  template: require "./als_clip.jade"
   scope:
     clip: "="
 
@@ -139,7 +140,7 @@ angular.module("app").directive "kAlsClip", ->
 
 angular.module("app").directive "kAlsSample", ->
   restrict: "A"
-  templateUrl: "views/als/als_sample.jade"
+  template: "./als_sample.jade"
   scope:
     sample: "="
 
@@ -157,7 +158,7 @@ angular.module("app").directive "kAlsSample", ->
 
 angular.module("app").directive "kAlsFileRef", ($routeParams, config) ->
   restrict: "A"
-  templateUrl: "views/als/als_file_ref.jade"
+  template: "./als_file_ref.jade"
   scope:
     fileRef: "="
 

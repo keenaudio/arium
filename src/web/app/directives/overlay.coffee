@@ -1,3 +1,4 @@
+NG = require "lib/ng"
 
 angular.module("app").directive "kOverlay", ($rootScope, $compile) ->
   restrict: "A"

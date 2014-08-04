@@ -1,8 +1,9 @@
 assert = require "assert"
+NG = require "lib/ng"
 
 angular.module("daw").directive "dawPlayButton", () ->
   restrict: "A"
-  templateUrl: "components/play_button/play_button.jade"
+  template: require "./play_button.jade"
   scope:
     playable: "="
     loadable: "="
@@ -73,7 +74,7 @@ angular.module("daw").directive "dawPlayButton", () ->
       return
     NG.attachScopeToElem $scope, $elem
     $scope.state = "init"
-    receiver = new Receiver($scope)
+    receiver = new NG.Receiver($scope)
     $scope.onClick = ->
       return  if loading()
       unless loaded()

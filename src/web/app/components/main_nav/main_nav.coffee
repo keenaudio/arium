@@ -1,3 +1,5 @@
+NG = require "lib/ng"
+
 angular.module("app").directive "kMainNav", ($http, $routeParams, app, daw) ->
   restrict: "A"
   template: require('./main_nav.jade')

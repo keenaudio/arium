@@ -79,26 +79,25 @@ gulp.task('watch-app', function() {
 });
 
 
-gulp.task('watch', ['watch-app'], function(cb) {
-  return;
+gulp.task('watch', [], function(cb) {
+  // return;
 
-  gulp.watch('src/{lib,server,web}/**/*.coffee', {
-    mode: 'poll'
-  }, ['coffee']);
-  gulp.watch("src/web/app/**/*.jade", {
-    mode: 'poll'
-  }, ["app-templates"]); // recompile jade templates to JS on file save
-  gulp.watch("src/web/daw/**/*.jade", {
-    mode: 'poll'
-  }, ["daw-templates"]);
+  // gulp.watch('src/{lib,server,web}/**/*.coffee', {
+  //   mode: 'poll'
+  // }, ['coffee']);
+  // gulp.watch("src/web/app/**/*.jade", {
+  //   mode: 'poll'
+  // }, ["app-templates"]); // recompile jade templates to JS on file save
+  // gulp.watch("src/web/daw/**/*.jade", {
+  //   mode: 'poll'
+  // }, ["daw-templates"]);
   gulp.watch('src/web/**/*.less', {
-    mode: 'poll'
+    // mode: 'poll'
   }, ['less']);
 
   var lr = livereload();
   gulp.watch([
-    "{.tmp,src}/{web,lib,static}/**/*",
-    "!**/*.{jade,coffee,less}"
+    ".tmp/{web,lib,static}/**/*"
   ], {
     // glob: , 
     // emitOnGlob: false, 
@@ -265,7 +264,7 @@ gulp.task('server', ['clean'], function(cb) {
   // start LR server
   livereload();
   console.log("$: " + JSON.stringify($));
-  $.sequence('app-templates', 'daw-templates', 'coffee', 'less', function() {
+  $.sequence('less', 'watch-app', function() {
     $.util.log("Now starting server and watch");
     $.gulp.start('dev-server', 'watch', function() {
       $.util.log("Somehow it is all over?");

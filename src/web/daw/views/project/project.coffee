@@ -1,3 +1,5 @@
+NG = require "lib/ng"
+
 angular.module("daw").directive "dawProject", ($http, $routeParams, config, daw) ->
   restrict: "A"
   template: require "./project.jade"
