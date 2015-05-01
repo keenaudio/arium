@@ -12,9 +12,9 @@ At the project root:
 * mkdir inbox
 * mkdir outbox
 
-drop ogg files into inbox
+drop mogg files into inbox
 
-At terminal, execute “gulp” to ingest the ogg files.
+At terminal, execute “gulp” to ingest the (m)ogg files.
 
 Now execute:
 gulp server
