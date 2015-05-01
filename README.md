@@ -1,18 +1,19 @@
-sudo npm install -g gulp
+* npm install -g gulp-cli
 
 
-At the root:
-brew install vorbis-tools
-brew install oggz
-brew install sox
-npm install
-bower install
+At the project root:
+* brew install vorbis-tools
+* brew install oggz
+* brew install sox
+* npm install
+* bower install
 
-mkdir library
-mkdir inbox
-mkdir outbox
+* mkdir library
+* mkdir inbox
+* mkdir outbox
 
 drop ogg files into inbox
+
 At terminal, execute “gulp” to ingest the ogg files.
 
 Now execute:
