@@ -17,26 +17,26 @@ angular.module("app").directive "kFolder", ($http, $routeParams, config, daw) ->
     $scope.name = $routeParams.folder
     $http.get("/json/folder/" + $routeParams.folder).success (data) ->
       $scope.files = data
-      $scope.tracks = _.map(data, (file) ->
+      $scope.tracks = data.map( (file) ->
         name: file
       )
-      $scope.samples = _.map(data, (file) ->
+      $scope.samples = data.map( (file) ->
         fileName: file
         url: config.get("routes.folders") + "/" + $routeParams.folder + "/" + file
       )
 
-      project = new formats.Project($scope.name, "wavs")
+      project = new Project($scope.name, "wavs")
       $scope.tracks.forEach (track) ->
         project.addTrack new Project.Track(track.name)
         return
 
-      set = new formats.Project.Set($scope.name, "wav")
+      set = new Project.Set($scope.name, "wav")
       $scope.samples.forEach (sample, index) ->
         set.addSample sample, index
         return
 
       project.addSet set
-      project.addSet new formats.Project.Set("Empty 1", "wav")
+      project.addSet new Project.Set("Empty 1", "wav")
       
       $scope.project = project
       daw.setProject project

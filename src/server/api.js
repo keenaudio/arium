@@ -8,7 +8,7 @@ var Als = require('../lib/formats/als');
 var Daw = require('../lib/formats/daw');
 
 module.exports = function(config) {
-	return {
+  return {
     meta: function(folder, cb) {
       var filePath = path.join(config.get('paths.meta'), folder) + '.json';
       console.log("Loading meta from: " + filePath);
@@ -18,18 +18,21 @@ module.exports = function(config) {
         cb(err, meta);
       });
     },
-		folders: function(cb) {
-			fs.readdir(config.get('paths.folders'), function(err, files) {
-				cb(err, files.filter(function(file) {
+    folders: function(cb) {
+      fs.readdir(config.get('paths.folders'), function(err, files) {
+        cb(err, files.filter(function(file) {
           return (file !== 'index.json');
         }));
-			});
-		},
+      });
+    },
 
-    
+
     files: function(folder, cb) {
       var folder = path.join(config.get('paths.folders'), folder);
-      glob("*.wav", { cwd: folder }, function(err, files) {
+      //console.log('Globbing wavs from: ', folder);
+      glob("**/*.wav", {
+        cwd: folder
+      }, function(err, files) {
         cb(err, files);
       });
     },
@@ -42,7 +45,7 @@ module.exports = function(config) {
       var filePath = _.template(config.getRaw('als2json.output'), {
         folder: folder,
         config: config
-      }); 
+      });
       fs.readFile(filePath, function(err, contents) {
         if (err) console.error(err);
         var json = JSON.parse(contents);
@@ -53,11 +56,11 @@ module.exports = function(config) {
       var filePath = _.template(config.getRaw('als2json.output'), {
         folder: projectName,
         config: config
-      }); 
+      });
       console.log("Reading file: " + filePath);
       fs.readFile(filePath, function(err, contents) {
         if (err) console.error(err);
-       // console.log("file contents: " + contents);
+        // console.log("file contents: " + contents);
         var json = JSON.parse(contents);
 
         var alsProject = Als.fromJSON(json);
@@ -78,7 +81,7 @@ module.exports = function(config) {
             var url = config.get('routes.als') + '/' + projectName + '/' + fr.fileRelPath + '/' + fr.fileName;
             var duration = sample.duration / 6000;
             console.log("Adding sample: " + url + " duration: " + duration);
-            daw.addSample(url, duration, (i+1));
+            daw.addSample(url, duration, (i + 1));
           }
         }
 
@@ -86,5 +89,5 @@ module.exports = function(config) {
         cb(err, daw);
       });
     }
-	}
+  }
 }
